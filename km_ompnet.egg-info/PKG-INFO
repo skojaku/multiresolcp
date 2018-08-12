@@ -1,0 +1,18 @@
+Metadata-Version: 1.1
+Name: km-ompnet
+Version: 0.0.0
+Summary: Multiresolution version of the KM algorithm
+Home-page: https://github.com/skojaku/???
+Author: Sadamori Kojaku
+Author-email: freesailing4046@gmail.com
+License: MIT
+Description: sada
+Keywords: network core-periphery structure
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Software Development
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6

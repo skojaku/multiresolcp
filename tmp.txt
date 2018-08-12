@@ -1,0 +1,48 @@
+
+n Ulist_new = mymatching(Ulist, resols)
+        Ulist_new = {Ulist{1}};
+
+        for t = 1:length(Ulist)-1
+                U = Ulist{t};
+                Unext = Ulist{t+1};
+
+                K = size(U,2);
+                Knext = size(Unext,2);
+
+                % compute the pairwise jaccard index
+                J = zeros(K, Knext);
+                for k = 1:K
+                        for k2=1:Knext
+                                J(k,k2) = 1 - pdist([U(:,k),Unext(:,k2)]','jaccard');
+                        end
+                end
+                % find the best match 
+                Jnext = [];
+                Jprev = [];
+                for k = 1:K
+                        [val,idx] = max(J(k,:));
+                        Jnext(k,:) = J(k,:)==val;
+                end
+                for k = 1:Knext
+                        [val,idx] = max(J(:,k));
+                        Jprev(:,k) = J(:,k)==val;
+                end
+
+                Jnext = (Jnext.*J>0);
+                Jprev = (Jprev.*J>0);
+
+
+                if any(sum(Jnext, 2)>1) | any(sum(Jprev, 1)>1)
+                        disp(fprintf('tie %f', resols(t)))
+                end
+                J = Jnext.*Jprev;
+
+                [newid,previd] = find(J);
+                Up = Unext;
+                Up(:, newid) = Up(:, previd);
+                J(:,newid) = J(:,previd);
+                Ulist_new{t+1} = Up;
+                Ulist{t+1} = Up;
+        end
+end
+
