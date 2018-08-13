@@ -1,19 +1,3 @@
-/*
-*
-* Multiresolution version of the KM algorithm algorithm
-*
-* Multiscale core-periphery structure in a global liner shipping network
-* Sadamori Kojaku, Mengqiao Xu, Haoxiang Xia and Naoki Masuda
-* Preprint arXiv: ????
-*
-* Please do not distribute without contacting the authors.
-*
-* AUTHOR - Sadamori Kojaku
-*
-* DATE - 08 Aug 2018
-*
-*/
-
 #include <omp.h>
 #include <algorithm>
 #include <cmath>

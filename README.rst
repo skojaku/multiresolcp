@@ -1,4 +1,43 @@
-Detect core-periphery pairs at each resolution parameter 
+
+About this library
+==================
+
+Python code for the KM algorithm for networks constructed from bipartite networks.
+
+Please cite
+
+Multiscale core-periphery structure in a global liner shipping network
+Sadamori Kojaku, Mengqiao Xu, Haoxiang Xia and Naoki Masuda
+Preprint arXiv: ????
+
+Installation
+============
+
+To install, type
+      
+..code-block:: bash
+
+  pip3 install multiresolcp 
+
+If you don't have a root privilege, use -user flag, i.e.,  
+      
+..code-block:: bash
+
+  pip3 install --user multiresolcp 
+
+If you don't have a root privilege, use -user flag, i.e.,  
+      
+..code-block:: bash
+
+  pip3 install --user multiresolcp 
+
+Usage
+=====
+
+..code-block:: bash
+  
+  import multiresolcp
+  c, x = multiresolcp.detect(G, ports, resol, phi, num_results, num_runs, consensus_threshold, significance_level, num_rand_nets)
 
 Parameters
 ----------
