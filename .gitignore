@@ -6,3 +6,5 @@ tmp
 makefile
 .pypirc
 inst.sh
+makefile
+samples
