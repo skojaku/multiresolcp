@@ -71,11 +71,11 @@ Returns
 
 c: dict of length N
     - key: port name
-    - value: index of the consensus CP pair to which the port belongs.  
+    - value: index of the consensus CP pair to which the port belongs  
 
 x: dict of length N
     - key: port name
-    - value: coreness of the port.
+    - value: coreness of the port
 
 Example
 =======
