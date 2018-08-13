@@ -15,26 +15,26 @@ Installation
 
 To install, type
       
-..code-block:: bash
+.. code-block:: bash
 
   pip3 install multiresolcp 
 
 If you don't have a root privilege, use -user flag, i.e.,  
       
-..code-block:: bash
+.. code-block:: bash
 
   pip3 install --user multiresolcp 
 
 If you don't have a root privilege, use -user flag, i.e.,  
       
-..code-block:: bash
+.. code-block:: bash
 
   pip3 install --user multiresolcp 
 
 Usage
 =====
 
-..code-block:: bash
+.. code-block:: bash
   
   import multiresolcp
   c, x = multiresolcp.detect(G, ports, resol, phi, num_results, num_runs, consensus_threshold, significance_level, num_rand_nets)
