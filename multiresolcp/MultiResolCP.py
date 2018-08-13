@@ -1,5 +1,6 @@
 import _km_ompnet as _cp
 import networkx as nx
+from itertools import compress
 import numpy as np
 import scipy
 
@@ -44,7 +45,7 @@ def detect(G, ports, resol = 1, phi = {}, num_results = 100, num_runs=10, consen
 
 	x : dict of length N
 		- key : port name
-		- value : coreness of port.  
+		- value : coreness of port.
 	"""
 	
 	routes = [node for node in G.nodes() if node not in ports]
@@ -64,6 +65,10 @@ def detect(G, ports, resol = 1, phi = {}, num_results = 100, num_runs=10, consen
 
 	results = _cp._detect(edges = edges, ports = np.array(list(range(Np))).astype(int), routes = np.array(list(range(Np, Nr + Np))).astype(int), phi = np.array(phi).astype(float), resol = float(resol), num_results = int(num_results), num_runs = int(num_runs), consensus_threshold = float(consensus_threshold), significance_level = float(significance_level),num_rand_nets = int(num_rand_nets))
 
-	c = dict(zip(ports, results[0]))	
-	x = dict(zip(ports, results[1]))
+	c = results[0].astype(int)	
+	x = results[1]	
+	b = c>=0
+	c = dict(zip(compress(ports,b), c[b]))	
+	x = dict(zip(compress(ports,b), x[b]))
+	
 	return c,x	

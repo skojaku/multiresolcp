@@ -7,16 +7,12 @@
 #include <algorithm>
 #include <iostream>
 
-/* -----------------------------------------------------
-Write the algorithms to be included in the prackage here
------------------------------------------------------ */
 #include <km_multiresol.h>
 #include <km_omp.h>
 
 using namespace std;
 namespace py = pybind11;
 
-/* Core-periphery pair detection algorithm */
 py::list _detect(py::array_t<int> edges,
                  py::array_t<int> ports,
                  py::array_t<int> routes,
@@ -32,7 +28,7 @@ py::list _detect(py::array_t<int> edges,
     Graph G;
     auto edges = edges_array_t.data();
     auto r = edges_array_t.request();
-    int M = r.shape[0];  // # of edges
+    int M = r.shape[0];
     for (int i = 0; i < M; i++) {
       int sid = edges[2 * i];
       int did = edges[2 * i + 1];

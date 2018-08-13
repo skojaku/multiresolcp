@@ -105,8 +105,11 @@ void KM_omp::detect(
   Graph U;
   vector<double> X(Np, 0.0);
   vector<double> sig_count(Np, 0.0);
-  KM_multiresol _km(_num_runs_KM_multiresol);
+#ifdef _OPENMP
+#pragma omp parallel for shared(X, sig_count,U)
+#endif
   for (int sid = 0; sid < _num_results; sid++) {
+    KM_multiresol _km(_num_runs_KM_multiresol);
     _km.detect(uniG, theta, resol);
 
     vector<int> cs = _km.get_c();
@@ -120,6 +123,10 @@ void KM_omp::detect(
     }
     vector<double> pvals = _calc_p_values(qs, ns);
     double alpha = 1.0 - pow(1.0 - _significance_level, (1.0 / (double)Ks));
+#ifdef _OPENMP
+#pragma omp critical
+#endif
+    {
     for (int i = 0; i < Np; i++) {
       if (pvals[cs[i]] > alpha) continue;
 
@@ -132,6 +139,7 @@ void KM_omp::detect(
       }
     X[i]+= xs[i];
     sig_count[i]++;
+    }
     }
   }
   for (int i = 0; i < Np; i++) {
@@ -151,7 +159,8 @@ void KM_omp::_one_mode_projection(
     int sz = adj.size();
     for (int i = 0; i < sz; i++) {
       for (int j = i + 1; j < sz; j++) {
-        uniG.addEdge(adj[i].node, adj[j].node, phi[r] / (double)(G.degree(r) - 1));
+	double w = phi[r] / (double)(G.degree(r) - 1.0);
+        uniG.addEdge(adj[i].node, adj[j].node, w);
       }
     }
   }
@@ -375,6 +384,7 @@ vector<int> KM_omp::_connected_components(Graph& U, double th, int N) {
     }
     cid++;
   }
+/*
   for (int i = 0; i < N; i++) {
     if (c[i] < 0) {
       c[i] = cid;
@@ -402,5 +412,6 @@ vector<int> KM_omp::_connected_components(Graph& U, double th, int N) {
     }
   };
   _relabeling(c);
+*/
   return c;
 }

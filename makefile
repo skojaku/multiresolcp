@@ -10,7 +10,7 @@ CFLAGS := -O3 -std=c++11 -fopenmp
 all: multiresolcp
 
 multiresolcp:src/* include/* multiresolcp/* 
-	sudo rm -rf build dist *.egg* && sudo python3 setup.py build install
+	sudo rm -rf build dist *.egg* && sudo python3.6 setup.py build install
 
 .PHONY: clean
 clean:

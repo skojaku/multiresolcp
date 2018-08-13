@@ -108,7 +108,9 @@ void Graph::aggregate_multi_edges() {
   for (auto& node : _A) {
     map<int, double> myMap;
     for (auto& adj : node.second) {
-      if (!myMap.insert(make_pair(adj.node, adj.weight)).second) {
+      if (myMap.count(adj.node)==0) {
+        myMap.insert(make_pair(adj.node, adj.weight));
+      }else{
         myMap[adj.node] += adj.weight;
       }
     }
