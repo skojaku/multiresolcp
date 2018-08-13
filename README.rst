@@ -19,7 +19,7 @@ To install, type
 
   pip3 install multiresolcp 
 
-If you don't have a root privilege, use -user flag, i.e.,  
+If you don't have root privilege, use -user flag, i.e.,  
       
 .. code-block:: bash
 
@@ -37,45 +37,45 @@ Usage
 Parameters
 ----------
 
-G : NetworkX graph
+G: NetworkX graph
     Bipartite network composed of N nodes of one type and M nodes of another type.
     See details in `NetworkX documentation <https://networkx.github.io/documentation/stable/>`_.
 
-ports : list of length N
-	Nodes to project (e.g., specify port nodes to create a network of ports)
+ports: list of length N
+    Nodes to project (e.g., specify port nodes to create a network of ports)
 
 resol : float (Optional. Default = 1)
-	Resolution parameter 
+    Resolution parameter 
 
 phi : dict of length M (Optional. Default phi[route] = 1 for all routes)
-	- key : route name
-	- value : container capacity 
+    - key : route name
+    - value : container capacity 
 
 num_samples: int (Optional. Default = 100. 0 < num_samples )
-	Number of sample CP structures used to obtain consensus CP structure
+    Number of sample CP structures used to obtain consensus CP structure
 
 num_runs: int (Optional. Default = 10. 0 < num_runs )
-	Number of runs of the algorithm to find one sample CP structure.
+    Number of runs of the algorithm to find one sample CP structure
 
 consensus_threshold: float (Optional. Default = 0.9. 0 <= consensus_threshold <=1 )
-	Conensus threshold. Range [0,1].
+    Consensus threshold
 
 significance_level: float (Optional. Default = 0.05. 0 < significance_level <=1 )
-	Statistical significance level before the Šidák correction.
+    Statistical significance level before the Šidák correction
 
 num_rand_nets: int (Optional. Default = 500. 0 < num_rand_nets )
-	Number of randomised networks used to infer the statistical significance.
+    Number of randomised networks used to infer the statistical significance
 
 Returns
 -------
 
-c : dict of length N
-	- key : port name
-	- value : index of the consensus CP pair to which the port belongs.  
+c: dict of length N
+    - key: port name
+    - value: index of the consensus CP pair to which the port belongs.  
 
-x : dict of length N
-	- key : port name
-	- value : coreness of port.
+x: dict of length N
+    - key: port name
+    - value: coreness of the port.
 
 Examples
 ========
@@ -100,4 +100,4 @@ Examples
   # Show results 
   print('Pair\tCoreness')
   for k in c.keys():
-	print('%d\t%f' % (c[k], x[k]))
+    print('%d\t%f' % (c[k], x[k]))
