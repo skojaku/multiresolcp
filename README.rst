@@ -77,8 +77,8 @@ x: dict of length N
     - key: port name
     - value: coreness of the port.
 
-Examples
-========
+Example
+=======
 
 .. code-block:: python
   
