@@ -16,16 +16,17 @@ Write the algorithms to be included in the prackage here
 using namespace std;
 namespace py = pybind11;
 
-
 /* Core-periphery pair detection algorithm */
 py::list _detect(py::array_t<int> edges,
                  py::array_t<int> ports,
                  py::array_t<int> routes,
                  py::array_t<double> phi,
                  double resol,
-                 int num_of_runs,
-                 int num_of_samples
-) {
+                 int num_results,
+                 int num_runs,
+                 double consensus_threshold,
+                 double significance_level,
+                 int num_rand_nets) {
 
   auto edges2graph = [](py::array_t<int> edges_array_t) {
     Graph G;
@@ -87,7 +88,12 @@ py::list _detect(py::array_t<int> edges,
   vector<int> routes_vec = pyarray2vec_int(routes);
 
   /* Core-periphery detection */
-  KM_omp km = KM_omp(num_of_runs, num_of_samples);
+  KM_omp km = KM_omp();
+  km.set_num_of_runs(num_runs);
+  km.set_significance_level(significance_level);
+  km.set_num_of_results(num_results);
+  km.set_num_of_rand_nets(num_rand_nets);
+  km.set_consensus_threshold(consensus_threshold);
   km.detect(G, ports_vec, routes_vec, phi_map, resol);
 
   /* Retrieve results */
@@ -104,5 +110,7 @@ PYBIND11_MODULE(_km_ompnet, m) {
 
   // CP detection algorithm
   m.def("_detect", &_detect, "KM algorithm", py::arg("edges"), py::arg("ports"), py::arg("routes"),
-        py::arg("phi"), py::arg("resol"), py::arg("num_of_runs") = 10, py::arg("num_of_samples") = 100);
+        py::arg("phi"), py::arg("resol"), py::arg("num_results"), py::arg("num_runs"),
+        py::arg("consensus_threshold"), py::arg("significance_level"),
+        py::arg("num_rand_nets"));
 }

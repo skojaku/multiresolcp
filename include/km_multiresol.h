@@ -106,7 +106,8 @@ Public functions
 void KM_multiresol::detect(Graph& G, vector<double>& theta, double resol) {
   _theta = theta;
   _resol = resol;
-  _louvain(G, _num_runs, _c, _x, _Q, _q, theta, resol, _mtrnd);
+  //_louvain(G, _num_runs, _c, _x, _Q, _q, theta, resol, _mtrnd);
+  _label_switching(G, _num_runs, _c, _x, _Q, _q, theta, resol, _mtrnd);
 }
 
 void KM_multiresol::calc_Q(Graph& G,
@@ -166,8 +167,10 @@ void KM_multiresol::_label_switching(Graph& G,
         return 2 * (d_i_c + d_i_p * (x)-resol * d_i * (D_c + D_p * x)) + x * (selfloop - resol * d_i * d_i);
       };  // End of calc_dQ_conf
 
+      cprime = c[node_id];
+      xprime = x[node_id];
+	
       int N = G.get_num_nodes();
-
       uniform_real_distribution<double> _udist(0.0, 1.0);
 
       vector<double> edges_to_core(N, 0.0);
@@ -188,7 +191,6 @@ void KM_multiresol::_label_switching(Graph& G,
       double D_peri = sum_of_th_peri[c[node_id]] - th * (1 - x[node_id]);
       double dQold = _calc_dQ_conf(edges_to_core[c[node_id]], edges_to_peri[c[node_id]], th, D_core, D_peri,
                                    selfloop, x[node_id], resol);
-
       dQ = 0;
       for (auto& adj : G.neighbours(node_id)) {
         int cid = c[adj.node];
@@ -243,7 +245,6 @@ void KM_multiresol::_label_switching(Graph& G,
     do {
       isupdated = false;
       shuffle(order.begin(), order.end(), mtrnd);
-
       for (int scan_count = 0; scan_count < N; scan_count++) {
         int i = order[scan_count];
 
@@ -308,7 +309,7 @@ void KM_multiresol::_label_switching(Graph& G,
     vector<double> qi;
     double Qi = 0.0;
 
-    __label_switching(G, ci, xi, theta, resol, _mtrnd);
+    __label_switching(G, ci, xi, theta, resol, mtrnd);
 
     calc_Q(G, ci, xi, theta, resol, qi);
     Qi = accumulate(qi.begin(), qi.end(), 0.0);

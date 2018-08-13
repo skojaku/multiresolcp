@@ -38,7 +38,7 @@ ext_modules = [
         ],
         language='c++',
         extra_link_args=['-lgomp'],
-	#extra_compile_args=['-fopenmp']
+	extra_compile_args=['-fopenmp']
     ),
 ]
 
@@ -88,7 +88,7 @@ class BuildExt(build_ext):
         if ct == 'unix':
             opts.append('-DVERSION_INFO="%s"' % self.distribution.get_version())
             opts.append(cpp_flag(self.compiler))
-            #opts.append('-fopenmp')
+            opts.append('-fopenmp')
             if has_flag(self.compiler, '-fvisibility=hidden'):
                 opts.append('-fvisibility=hidden')
         elif ct == 'msvc':
@@ -98,7 +98,7 @@ class BuildExt(build_ext):
         build_ext.build_extensions(self)
 
 setup(
-    name='km_ompnet',
+    name='multiresolcp',
     version=__version__,
     author='Sadamori Kojaku',
     author_email='freesailing4046@gmail.com',

@@ -1,0 +1,8 @@
+test
+dist
+build
+*.egg-info
+tmp
+makefile
+.pypirc
+inst.sh

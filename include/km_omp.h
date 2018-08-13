@@ -29,23 +29,32 @@ using namespace std;
 class KM_omp {
  public:
   // Constructor
-  KM_omp(int num_runs, int num_samples);
+  KM_omp();
 
   void detect(Graph& biG, vector<int>& ports, vector<int>& routes, map<int, double>& phi, double resol);
 
+  /* Getters */ 
   vector<int> get_c() const { return _c; };
   vector<double> get_x() const { return _x; };
+ 
+  /* Setters */ 
+  void set_num_of_runs(int param)  {_num_runs_KM_multiresol = param;};
+  void set_significance_level(int param)  { _significance_level = param;};
+  void set_num_of_results(int param)  { _num_results = param; };
+  void set_num_of_rand_nets(int param)  { _num_rand_nets = param;};
+  void set_consensus_threshold(double param)  { _consensus_th = param; };
 
  private:
   int _num_runs_KM_multiresol;
-  int _num_samples;
+  int _num_results;
   int _num_rand_nets;
   double _significance_level;
+  double _consensus_th;
+
   vector<double> _nhat;
   vector<double> _qhat;
   vector<int> _c;
   vector<double> _x;
-  double _consensus_th;
 
   void _one_mode_projection(
       Graph& biG, vector<int>& ports, vector<int>& routes, map<int, double>& phi, Graph& uniG);
@@ -56,9 +65,9 @@ class KM_omp {
   vector<int> _connected_components(Graph& U, double th, int N);
 };
 
-KM_omp::KM_omp(int num_runs, int num_samples) {
-  _num_runs_KM_multiresol = num_runs;
-  _num_samples = num_samples;
+KM_omp::KM_omp() {
+  _num_runs_KM_multiresol = 10;
+  _num_results = 100;
   _num_rand_nets = 500;
   _significance_level = 0.05;
   _consensus_th = 0.9;
@@ -97,7 +106,7 @@ void KM_omp::detect(
   vector<double> X(Np, 0.0);
   vector<double> sig_count(Np, 0.0);
   KM_multiresol _km(_num_runs_KM_multiresol);
-  for (int sid = 0; sid < _num_samples; sid++) {
+  for (int sid = 0; sid < _num_results; sid++) {
     _km.detect(uniG, theta, resol);
 
     vector<int> cs = _km.get_c();
@@ -131,7 +140,7 @@ void KM_omp::detect(
   }
   U.aggregate_multi_edges();
 
-  _c = _connected_components(U, _num_samples * _consensus_th, Np);
+  _c = _connected_components(U, _num_results * _consensus_th, Np);
   _x = X;
 }
 
@@ -237,7 +246,7 @@ void KM_omp::_est_null_model(Graph& biG, vector<int>& ports, vector<int>& routes
   vector<double> nhat;
   vector<double> qhat;
 #ifdef _OPENMP
-#pragma omp parallel for shared(mtrnd_list)
+#pragma omp parallel for shared(mtrnd_list, nhat, qhat)
 #endif
   for (int it = 0; it < _num_rand_nets; it++) {
     int tid = omp_get_thread_num();
@@ -250,13 +259,12 @@ void KM_omp::_est_null_model(Graph& biG, vector<int>& ports, vector<int>& routes
                                   mtrnd);
     
     _one_mode_projection(biG_rand, ports, routes, phi, uniG_rand);
-
     int myidx = 0; 
     vector<double> theta(Nport,0);
     for(auto& p: ports){
 	theta[myidx] = biG_rand.degree(p);
 	myidx++;
-    } 
+    }
     _km.detect(uniG_rand, theta, resol);
 
     vector<double> qr = _km.get_q();
