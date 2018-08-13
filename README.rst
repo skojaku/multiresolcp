@@ -92,7 +92,7 @@ Example
   ports = [0, 1, 2, 3, 4] 
 
   # Container capacity (e.g., key = route name, value = container capacity) 
-  phi = {5 : 0.5, 6 : 0.1, 7 : 0.8, 8: 0.2, 9 : 1} 
+  phi = {5: 0.5, 6: 0.1, 7: 0.8, 8: 0.2, 9: 1} 
   
   # Detect core-periphery structure  
   c, x = multiresolcp.detect(G, ports, phi = phi)
