@@ -4,7 +4,7 @@ from itertools import compress
 import numpy as np
 import scipy
 
-def detect(G, ports, resol = 1, phi = {}, num_results = 100, num_runs=10, consensus_threshold=0.9, significance_level = 0.05, num_rand_nets = 500):
+def detect(G, ports, resol = 1, phi = {}, num_samples = 100, num_runs=10, consensus_threshold=0.9, significance_level = 0.05, num_rand_nets = 500):
 	""" Detect core-periphery pairs at each resolution parameter 
 
 	Parameters
@@ -22,7 +22,7 @@ def detect(G, ports, resol = 1, phi = {}, num_results = 100, num_runs=10, consen
 		- key : Route name
 		- value : Container capacity 
 	
-	num_results: float (Optional. Default = 0.9)
+	num_samples: float (Optional. Default = 0.9)
 		Number of results used to obtain consensus CP structure
 	
 	num_runs: float (Optional. Default = 0.9)
@@ -63,7 +63,7 @@ def detect(G, ports, resol = 1, phi = {}, num_results = 100, num_runs=10, consen
 	Np = len(ports)
 	Nr = len(routes)
 
-	results = _cp._detect(edges = edges, ports = np.array(list(range(Np))).astype(int), routes = np.array(list(range(Np, Nr + Np))).astype(int), phi = np.array(phi).astype(float), resol = float(resol), num_results = int(num_results), num_runs = int(num_runs), consensus_threshold = float(consensus_threshold), significance_level = float(significance_level),num_rand_nets = int(num_rand_nets))
+	results = _cp._detect(edges = edges, ports = np.array(list(range(Np))).astype(int), routes = np.array(list(range(Np, Nr + Np))).astype(int), phi = np.array(phi).astype(float), resol = float(resol), num_samples = int(num_samples), num_runs = int(num_runs), consensus_threshold = float(consensus_threshold), significance_level = float(significance_level),num_rand_nets = int(num_rand_nets))
 
 	c = results[0].astype(int)	
 	x = results[1]	

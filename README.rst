@@ -2,9 +2,9 @@
 About this library
 ==================
 
-Python code for the KM algorithm for networks constructed from bipartite networks.
+Python code of the KM algorithm for networks induced by a one-mode projection of bipartite networks.
 
-Please cite
+Please cite:
 
 Multiscale core-periphery structure in a global liner shipping network
 Sadamori Kojaku, Mengqiao Xu, Haoxiang Xia and Naoki Masuda
@@ -25,11 +25,6 @@ If you don't have a root privilege, use -user flag, i.e.,
 
   pip3 install --user multiresolcp 
 
-If you don't have a root privilege, use -user flag, i.e.,  
-      
-.. code-block:: bash
-
-  pip3 install --user multiresolcp 
 
 Usage
 =====
@@ -37,56 +32,72 @@ Usage
 .. code-block:: bash
   
   import multiresolcp
-  c, x = multiresolcp.detect(G, ports, resol, phi, num_results, num_runs, consensus_threshold, significance_level, num_rand_nets)
+  c, x = multiresolcp.detect(G, ports, resol, phi, num_samples, num_runs, consensus_threshold, significance_level, num_rand_nets)
 
 Parameters
 ----------
 
 G : NetworkX graph
-    Bipartite network composed of N nodes of one part and M nodes of the other part.
+    Bipartite network composed of N nodes of one type and M nodes of another type.
     See details in `NetworkX documentation <https://networkx.github.io/documentation/stable/>`_.
 
 ports : list of length N
-	Nodes to project onto (e.g., specify port nodes to create a network of ports)
+	Nodes to project (e.g., specify port nodes to create a network of ports)
 
 resol : float (Optional. Default = 1)
-	Resolution parameter  
+	Resolution parameter 
 
 phi : dict of length M (Optional. Default phi[route] = 1 for all routes)
-	- key : Route name
-	- value : Container capacity 
+	- key : route name
+	- value : container capacity 
 
-num_results: float (Optional. Default = 100)
-	Number of results used to find consensus CP structure
+num_samples: int (Optional. Default = 100. 0 < num_samples )
+	Number of sample CP structures used to obtain consensus CP structure
 
-num_runs: float (Optional. Default = 10)
-	Number of runs of the algorithm for one result
+num_runs: int (Optional. Default = 10. 0 < num_runs )
+	Number of runs of the algorithm to find one sample CP structure.
 
-consensus_threshold: float (Optional. Default = 0.9)
+consensus_threshold: float (Optional. Default = 0.9. 0 <= consensus_threshold <=1 )
 	Conensus threshold. Range [0,1].
 
-significance_level: float (Optional. Default = 0.05)
-	Statistical significance level before the Šidák correction. Range [0,1]
+significance_level: float (Optional. Default = 0.05. 0 < significance_level <=1 )
+	Statistical significance level before the Šidák correction.
 
-num_rand_nets: float (Optional. Default = 500)
-	Number of randomised networks to infer the statistical significance
+num_rand_nets: int (Optional. Default = 500. 0 < num_rand_nets )
+	Number of randomised networks used to infer the statistical significance.
 
 Returns
 -------
 
 c : dict of length N
 	- key : port name
-	- value : index of the CP pair to which the port belongs.  
+	- value : index of the consensus CP pair to which the port belongs.  
 
 x : dict of length N
 	- key : port name
 	- value : coreness of port.
 
-Example
-=======
+Examples
+========
 
-.. code-block:: bash
+.. code-block:: python
   
-  import multiresolcp 
-  Write example code here
-  c, x = multiresolcp.detect(G, ports, resol, phi, num_results, num_runs, consensus_threshold, significance_level, num_rand_nets)
+  import multiresolcp
+  import networkx as nx
+  
+  # Load NetworkX graph object from file "test.edgelist"
+  G = nx.read_edgelist("test.edgelist")
+
+  # Nodes to project (e.g., port nodes if one intends to create a network of ports) 
+  ports = [0, 1, 2, 3, 4] 
+
+  # Container capacity (e.g., key = route name, value = container capacity) 
+  phi = {5 : 0.5, 6 : 0.1, 7 : 0.8, 8: 0.2, 9 : 1} 
+  
+  # Detect core-periphery structure  
+  c, x = multiresolcp.detect(G, ports, phi = phi)
+
+  # Show results 
+  print('Pair\tCoreness')
+  for k in c.keys():
+	print('%d\t%f' % (c[k], x[k]))

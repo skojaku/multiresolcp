@@ -24,13 +24,13 @@ class KM_omp {
   /* Setters */ 
   void set_num_of_runs(int param)  {_num_runs_KM_multiresol = param;};
   void set_significance_level(int param)  { _significance_level = param;};
-  void set_num_of_results(int param)  { _num_results = param; };
+  void set_num_of_samples(int param)  { _num_samples = param; };
   void set_num_of_rand_nets(int param)  { _num_rand_nets = param;};
   void set_consensus_threshold(double param)  { _consensus_th = param; };
 
  private:
   int _num_runs_KM_multiresol;
-  int _num_results;
+  int _num_samples;
   int _num_rand_nets;
   double _significance_level;
   double _consensus_th;
@@ -51,7 +51,7 @@ class KM_omp {
 
 KM_omp::KM_omp() {
   _num_runs_KM_multiresol = 10;
-  _num_results = 100;
+  _num_samples = 100;
   _num_rand_nets = 500;
   _significance_level = 0.05;
   _consensus_th = 0.9;
@@ -92,7 +92,7 @@ void KM_omp::detect(
 #ifdef _OPENMP
 #pragma omp parallel for shared(X, sig_count,U)
 #endif
-  for (int sid = 0; sid < _num_results; sid++) {
+  for (int sid = 0; sid < _num_samples; sid++) {
     KM_multiresol _km(_num_runs_KM_multiresol);
     _km.detect(uniG, theta, resol);
 
@@ -132,7 +132,7 @@ void KM_omp::detect(
   }
   U.aggregate_multi_edges();
 
-  _c = _connected_components(U, _num_results * _consensus_th, Np);
+  _c = _connected_components(U, _num_samples * _consensus_th, Np);
   _x = X;
 }
 

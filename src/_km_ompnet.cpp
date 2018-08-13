@@ -18,7 +18,7 @@ py::list _detect(py::array_t<int> edges,
                  py::array_t<int> routes,
                  py::array_t<double> phi,
                  double resol,
-                 int num_results,
+                 int num_samples,
                  int num_runs,
                  double consensus_threshold,
                  double significance_level,
@@ -87,7 +87,7 @@ py::list _detect(py::array_t<int> edges,
   KM_omp km = KM_omp();
   km.set_num_of_runs(num_runs);
   km.set_significance_level(significance_level);
-  km.set_num_of_results(num_results);
+  km.set_num_of_samples(num_samples);
   km.set_num_of_rand_nets(num_rand_nets);
   km.set_consensus_threshold(consensus_threshold);
   km.detect(G, ports_vec, routes_vec, phi_map, resol);
@@ -106,7 +106,7 @@ PYBIND11_MODULE(_km_ompnet, m) {
 
   // CP detection algorithm
   m.def("_detect", &_detect, "KM algorithm", py::arg("edges"), py::arg("ports"), py::arg("routes"),
-        py::arg("phi"), py::arg("resol"), py::arg("num_results"), py::arg("num_runs"),
+        py::arg("phi"), py::arg("resol"), py::arg("num_samples"), py::arg("num_runs"),
         py::arg("consensus_threshold"), py::arg("significance_level"),
         py::arg("num_rand_nets"));
 }
