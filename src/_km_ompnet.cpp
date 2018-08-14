@@ -81,6 +81,7 @@ py::list _detect(py::array_t<int> edges,
   map<int, double> phi_map = pyarray2phi_map(routes, phi);
   vector<int> ports_vec = pyarray2vec_int(ports);
   vector<int> routes_vec = pyarray2vec_int(routes);
+
   /* Core-periphery detection */
   KM_omp km = KM_omp();
   km.set_num_of_runs(num_runs);
@@ -99,12 +100,11 @@ py::list _detect(py::array_t<int> edges,
   return results;
 }
 
+/* Interface between C++ and Python */
 PYBIND11_MODULE(_km_ompnet, m) {
-  m.doc() = "The KM algorithm for networks constructed from one-mode-projection. ";
+  m.doc() = "The KM algorithm for networks induced by a one-mode projection of bipartite networks";
 
-  // CP detection algorithm
   m.def("_detect", &_detect, "KM algorithm", py::arg("edges"), py::arg("ports"), py::arg("routes"),
         py::arg("phi"), py::arg("resol"), py::arg("num_samples"), py::arg("num_runs"),
-        py::arg("consensus_threshold"), py::arg("significance_level"),
-        py::arg("num_rand_nets"));
+        py::arg("consensus_threshold"), py::arg("significance_level"), py::arg("num_rand_nets"));
 }

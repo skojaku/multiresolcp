@@ -13,11 +13,11 @@ using namespace std;
 
 class KM_multiresol {
  public:
-  // Constructor
+  /* Constructor */
   KM_multiresol();
   KM_multiresol(int num_runs);
 
-  // detect and calc_Q take bipartite networks
+  /* Main functions */
   void detect(Graph& G, vector<double>& theta, double resol);
 
   void calc_Q(Graph& G,  // bipartite network
@@ -27,13 +27,12 @@ class KM_multiresol {
               double resol,
               vector<double>& q);
 
-  // Getter
+  /* Getter */
   vector<int> get_c() const { return _c; };
   vector<double> get_x() const { return _x; };
   vector<double> get_q() const { return _q; };
 
  private:
-  /* For core-periphery detection */
   int _num_runs;
   vector<int> _c;
   vector<double> _x;
@@ -41,8 +40,6 @@ class KM_multiresol {
   vector<double> _q;
   vector<double> _theta;
   double _resol;
-
-  /* Random number generator */
   mt19937_64 _mtrnd;
 
   void _label_switching(Graph& G,
@@ -89,7 +86,6 @@ void KM_multiresol::detect(Graph& G, vector<double>& theta, double resol) {
   _theta = theta;
   _resol = resol;
   _louvain(G, _num_runs, _c, _x, _Q, _q, theta, resol, _mtrnd);
-  //_label_switching(G, _num_runs, _c, _x, _Q, _q, theta, resol, _mtrnd);
 }
 
 void KM_multiresol::calc_Q(Graph& G,
@@ -134,7 +130,7 @@ void KM_multiresol::_label_switching(Graph& G,
                                      vector<double>& theta,
                                      double resol,
                                      mt19937_64& mtrnd) {
-  /* Label switching algorithm */
+  /* Label switching algorithm (inner loop) */
   auto __label_switching = [](Graph& G, vector<int>& c, vector<double>& x, vector<double>& theta,
                               double resol, mt19937_64& mtrnd) {
 
@@ -232,8 +228,8 @@ void KM_multiresol::_label_switching(Graph& G,
       for (int scan_count = 0; scan_count < N; scan_count++) {
         int i = order[scan_count];
 
-        int cprime = c[i];     // c'
-        double xprime = x[i];  // x'
+        int cprime = c[i];
+        double xprime = x[i];
 
         double dQ = 0;
         double th = theta[i];
@@ -277,15 +273,12 @@ void KM_multiresol::_label_switching(Graph& G,
     }
   };  // End of __label_switching
 
-  /* Run the label switching algorithm num_run times and select
-     the result yielding the largest quality
-   */
+  /* Label switching (outer loop) */
   int N = G.get_num_nodes();
   c.clear();
   x.clear();
   c.assign(N, 0);
   x.assign(N, 1.0);
-
   Q = -1;
   for (int i = 0; i < num_of_runs; i++) {
     vector<int> ci;
@@ -316,9 +309,10 @@ void KM_multiresol::_louvain(Graph& G,
                              vector<double>& theta,
                              double resol,
                              mt19937_64& mtrnd) {
-  /* Coarse-grain networks */
+  /* Coarse-graining networks */
   auto _coarse_graining = [](Graph& G, const vector<int>& c, const vector<double>& x, Graph& newG,
                              vector<int>& toLayerId, vector<double>& theta, vector<double>& theta_new) {
+
     auto _relabeling = [](vector<int>& c) {
       int N = c.size();
       std::vector<int> labs;
@@ -380,7 +374,7 @@ void KM_multiresol::_louvain(Graph& G,
       int sid = toLayerId[mi];
       theta_new[sid] += theta[i];
     }
-  };
+  };  // End of _coarse_graining
 
   /* Initialisation */
   int N = G.get_num_nodes();
@@ -409,7 +403,6 @@ void KM_multiresol::_louvain(Graph& G,
     vector<double> cnet_x;
     double Qt = 0;
     vector<double> qt;
-    // cout<<cnet_G.get_total_edge_weight()<<" "<<G.get_total_edge_weight()<<endl;
     _label_switching(cnet_G, num_of_runs, cnet_c, cnet_x, Qt, qt, cnet_theta, resol, mtrnd);
 
     for (int i = 0; i < N; i++) {
@@ -419,7 +412,6 @@ void KM_multiresol::_louvain(Graph& G,
     }
 
     calc_Q(cnet_G, cnet_c, cnet_x, cnet_theta, resol, qt);
-    // calc_Q(G, ct, xt, theta, resol, qt);
     Qt = accumulate(qt.begin(), qt.end(), 0.0);
 
     if (Qt >= Q) {

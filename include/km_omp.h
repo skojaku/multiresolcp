@@ -14,16 +14,18 @@ using namespace std;
 
 class KM_omp {
  public:
-  // Constructor
+
+  /* Constructor */
   KM_omp();
 
+  /* Main functions */
   void detect(Graph& biG, vector<int>& ports, vector<int>& routes, map<int, double>& phi, double resol);
 
-  /* Getters */
+  /* Getter */
   vector<int> get_c() const { return _c; };
   vector<double> get_x() const { return _x; };
 
-  /* Setters */
+  /* Setter */
   void set_num_of_runs(int param) { _num_runs_KM_multiresol = param; };
   void set_significance_level(int param) { _significance_level = param; };
   void set_num_of_samples(int param) { _num_samples = param; };
@@ -54,8 +56,13 @@ class KM_omp {
 
   vector<double> _calc_p_values(vector<double>& q, vector<double>& n);
   vector<int> _connected_components(Graph& U, double th, int N);
+
 };
 
+
+/*-----------------------------
+Constructor
+-----------------------------*/
 KM_omp::KM_omp() {
   _num_runs_KM_multiresol = 10;
   _num_samples = 100;
@@ -64,6 +71,9 @@ KM_omp::KM_omp() {
   _consensus_th = 0.9;
 }
 
+/*-----------------------------
+Public functions
+-----------------------------*/
 void KM_omp::detect(
     Graph& biG, vector<int>& ports, vector<int>& routes, map<int, double>& phi, double resol) {
   int Np = ports.size();
@@ -85,7 +95,6 @@ void KM_omp::detect(
 
   Graph uniG;
   _one_mode_projection(biG, ports, routes, phi, uniG);
-
   _est_null_model(biG, ports, routes, phi, resol, _num_rand_nets);
 
   Graph U;
@@ -138,6 +147,9 @@ void KM_omp::detect(
   _x = X;
 }
 
+/*-----------------------------
+Private functions
+-----------------------------*/
 void KM_omp::_one_mode_projection(
     Graph& G, vector<int>& ports, vector<int>& routes, map<int, double>& phi, Graph& uniG) {
   for (auto& r : routes) {
@@ -360,7 +372,6 @@ vector<int> KM_omp::_connected_components(Graph& U, double th, int N) {
 
     while (oldn != n) {
       oldn = n;
-
       fill(xnew.begin(), xnew.end(), 0);
       for (auto& nodes : U.adjacency_list()) {
         for (auto& adj : nodes.second) {

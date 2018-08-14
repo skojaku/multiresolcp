@@ -9,7 +9,6 @@ class AdjacentNode {
  public:
   int node;
   double weight;
-
   AdjacentNode(int _node, double _weight) {
     node = _node;
     weight = _weight;
@@ -24,7 +23,6 @@ class Graph {
 
   Graph() { _N = 0; }
 
-  // Getter
   int get_num_nodes() { return _N; };
 
   int get_num_edges() {
@@ -75,11 +73,7 @@ class Graph {
     if (isnode(nid)) return _A[nid];
     return _empty_vec;
   };
-
-  // Setter
   void addEdge(int u, int v, double w);
-
-  // Others
   void aggregate_multi_edges();
   map<int, int> renumbering();
   void clear() {
@@ -91,11 +85,11 @@ class Graph {
 };
 
 void Graph::addEdge(int u, int v, double w) {
-  if (0 == _A.count(u)) {  // if node u exists
+  if (0 == _A.count(u)) {
     _A.insert(make_pair(u, vector<AdjacentNode>()));
   }
 
-  if (0 == _A.count(v)) {  // if node u exists
+  if (0 == _A.count(v)) {
     _A.insert(make_pair(v, vector<AdjacentNode>()));
   }
 
@@ -108,7 +102,6 @@ void Graph::addEdge(int u, int v, double w) {
   _N = max(_N, max(u + 1, v + 1));
 }
 
-// merge multiple-edges with a single weighted edge
 void Graph::aggregate_multi_edges() {
   Graph Gnew;
 
@@ -137,7 +130,6 @@ void Graph::aggregate_multi_edges() {
   _N = Gnew._N;
 }
 
-// Renumbering nodes
 map<int, int> Graph::renumbering() {
   Graph Gnew;
   map<int, int> myMap;

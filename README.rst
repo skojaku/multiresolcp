@@ -44,26 +44,26 @@ G: NetworkX graph
 ports: list of length N
     Nodes to project (e.g., specify port nodes to create a network of ports)
 
-resol : float (Optional; Default = 1; 0<=resol )
+resol : float (Optional; Default = 1; 0<=resol)
     Resolution parameter 
 
-phi : dict of length M (Optional. Default phi[route] = 1 for all routes)
+phi : dict of length M (Optional; Default phi[route] = 1 for all routes)
     - key : route name
     - value : container capacity 
 
-num_samples: int (Optional. Default = 100. 0 < num_samples )
+num_samples: int (Optional; Default = 100; 0 < num_samples)
     Number of sample CP structures used to obtain consensus CP structure
 
-num_runs: int (Optional. Default = 10. 0 < num_runs )
+num_runs: int (Optional; Default = 10; 0 < num_runs)
     Number of runs of the algorithm to find one sample CP structure
 
-consensus_threshold: float (Optional. Default = 0.9. 0 <= consensus_threshold <=1 )
+consensus_threshold: float (Optional; Default = 0.9; 0 <= consensus_threshold <=1)
     Consensus threshold
 
-significance_level: float (Optional. Default = 0.05. 0 < significance_level <=1 )
+significance_level: float (Optional; Default = 0.05; 0 < significance_level <=1)
     Statistical significance level before the Šidák correction
 
-num_rand_nets: int (Optional. Default = 500. 0 < num_rand_nets )
+num_rand_nets: int (Optional; Default = 500; 0 < num_rand_nets)
     Number of randomised networks used to infer the statistical significance
 
 Returns
