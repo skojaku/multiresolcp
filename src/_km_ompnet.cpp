@@ -82,7 +82,6 @@ py::list _detect(py::array_t<int> edges,
   map<int, double> phi_map = pyarray2phi_map(routes, phi);
   vector<int> ports_vec = pyarray2vec_int(ports);
   vector<int> routes_vec = pyarray2vec_int(routes);
-
   /* Core-periphery detection */
   KM_omp km = KM_omp();
   km.set_num_of_runs(num_runs);

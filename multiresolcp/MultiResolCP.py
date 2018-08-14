@@ -3,6 +3,7 @@ import networkx as nx
 from itertools import compress
 import numpy as np
 import scipy
+from scipy.sparse import triu 
 
 def detect(G, ports, resol = 1, phi = {}, num_samples = 100, num_runs=10, consensus_threshold=0.9, significance_level = 0.05, num_rand_nets = 500):
 	""" Detect core-periphery pairs at each resolution parameter 
@@ -55,11 +56,10 @@ def detect(G, ports, resol = 1, phi = {}, num_samples = 100, num_runs=10, consen
 	else:
 		phi = [phi[r] for r in routes]
 
-
 	A = nx.adjacency_matrix(G, ports+routes)
-	r, c = A.nonzero()
+	r, c = triu(A).nonzero()
 	edges = np.array([ [rc[0], rc[1]] for rc in zip(r, c)]).astype(int)
-
+	
 	Np = len(ports)
 	Nr = len(routes)
 

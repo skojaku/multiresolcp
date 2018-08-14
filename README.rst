@@ -6,9 +6,9 @@ Python code of the KM algorithm for networks induced by a one-mode projection of
 
 Please cite:
 
-Multiscale core-periphery structure in a global liner shipping network
-Sadamori Kojaku, Mengqiao Xu, Haoxiang Xia and Naoki Masuda
-Preprint arXiv: ????
+Sadamori Kojaku, Mengqiao Xu, Haoxiang Xia and Naoki Masuda.|
+Multiscale core-periphery structure in a global liner shipping network.A
+Preprint arXiv: ????.
 
 Installation
 ============

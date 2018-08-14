@@ -80,9 +80,7 @@ KM_multiresol::KM_multiresol(int num_runs) {
   _num_runs = num_runs;
 };
 
-KM_multiresol::KM_multiresol() {
-	KM_multiresol(10);
-};
+KM_multiresol::KM_multiresol() { KM_multiresol(10); };
 
 /*-----------------------------
 Public functions
@@ -136,7 +134,6 @@ void KM_multiresol::_label_switching(Graph& G,
                                      vector<double>& theta,
                                      double resol,
                                      mt19937_64& mtrnd) {
-
   /* Label switching algorithm */
   auto __label_switching = [](Graph& G, vector<int>& c, vector<double>& x, vector<double>& theta,
                               double resol, mt19937_64& mtrnd) {
@@ -148,12 +145,15 @@ void KM_multiresol::_label_switching(Graph& G,
 
       auto _calc_dQ_conf = [](double d_i_c, double d_i_p, double d_i, double D_c, double D_p, double selfloop,
                               double x, const double resol) {
-        return 2 * (d_i_c + d_i_p * (x)-resol * d_i * (D_c + D_p * x)) + x * (selfloop - resol * d_i * d_i);
+        return 2 * (d_i_c + d_i_p * (x)-resol * d_i * (D_c + D_p * x)) +
+               x * (selfloop - 2 * resol * d_i * d_i);
       };  // End of calc_dQ_conf
 
       cprime = c[node_id];
       xprime = x[node_id];
-	
+
+      if (G.isnode(node_id) == false) return;
+
       int N = G.get_num_nodes();
       uniform_real_distribution<double> _udist(0.0, 1.0);
 
@@ -290,14 +290,12 @@ void KM_multiresol::_label_switching(Graph& G,
   for (int i = 0; i < num_of_runs; i++) {
     vector<int> ci;
     vector<double> xi;
-    vector<double> qi;
-    double Qi = 0.0;
 
     __label_switching(G, ci, xi, theta, resol, mtrnd);
 
+    vector<double> qi;
     calc_Q(G, ci, xi, theta, resol, qi);
-    Qi = accumulate(qi.begin(), qi.end(), 0.0);
-
+    double Qi = accumulate(qi.begin(), qi.end(), 0.0);
     if (Qi > Q) {
       c = ci;
       x = xi;
@@ -320,7 +318,7 @@ void KM_multiresol::_louvain(Graph& G,
                              mt19937_64& mtrnd) {
   /* Coarse-grain networks */
   auto _coarse_graining = [](Graph& G, const vector<int>& c, const vector<double>& x, Graph& newG,
-                             vector<int>& toLayerId, vector<double>& theta) {
+                             vector<int>& toLayerId, vector<double>& theta, vector<double>& theta_new) {
     auto _relabeling = [](vector<int>& c) {
       int N = c.size();
       std::vector<int> labs;
@@ -356,23 +354,32 @@ void KM_multiresol::_louvain(Graph& G,
     }
 
     newG = Graph();
-    vector<double> theta_old = theta;
-    theta.clear(); 
-    theta.assign(maxid + 1, 0);
     for (auto& node : G.adjacency_list()) {
       int i = node.first;
       int mi = 2 * c[i] + (int)x[i];
       int sid = toLayerId[mi];
-      theta[si]+=theta_old[i];
       for (auto& adj : node.second) {
+        if (i > adj.node) continue;
         int mj = 2 * c[adj.node] + (int)x[adj.node];
-
         int did = toLayerId[mj];
-        newG.addEdge(sid, did, adj.weight);
+
+        if (sid == did) {
+          newG.addEdge(sid, did, adj.weight / 2);
+        } else {
+          newG.addEdge(sid, did, adj.weight);
+        }
       }
     }
-
     newG.aggregate_multi_edges();
+
+    theta_new.clear();
+    theta_new.assign(newG.get_num_nodes(), 0);
+    for (auto& node : G.adjacency_list()) {
+      int i = node.first;
+      int mi = 2 * c[i] + (int)x[i];
+      int sid = toLayerId[mi];
+      theta_new[sid] += theta[i];
+    }
   };
 
   /* Initialisation */
@@ -387,8 +394,8 @@ void KM_multiresol::_louvain(Graph& G,
   vector<double> xt = x;
   Graph cnet_G;
   vector<int> toLayerId;
-  vector<double> cnet_theta = theta;
-  _coarse_graining(G, ct, xt, cnet_G, toLayerId, cnet_theta);
+  vector<double> cnet_theta;
+  _coarse_graining(G, ct, xt, cnet_G, toLayerId, theta, cnet_theta);
 
   Q = 0;
 
@@ -402,6 +409,7 @@ void KM_multiresol::_louvain(Graph& G,
     vector<double> cnet_x;
     double Qt = 0;
     vector<double> qt;
+    // cout<<cnet_G.get_total_edge_weight()<<" "<<G.get_total_edge_weight()<<endl;
     _label_switching(cnet_G, num_of_runs, cnet_c, cnet_x, Qt, qt, cnet_theta, resol, mtrnd);
 
     for (int i = 0; i < N; i++) {
@@ -411,6 +419,7 @@ void KM_multiresol::_louvain(Graph& G,
     }
 
     calc_Q(cnet_G, cnet_c, cnet_x, cnet_theta, resol, qt);
+    // calc_Q(G, ct, xt, theta, resol, qt);
     Qt = accumulate(qt.begin(), qt.end(), 0.0);
 
     if (Qt >= Q) {
@@ -422,8 +431,10 @@ void KM_multiresol::_louvain(Graph& G,
 
     /* Second step (Coarse-graining) */
     Graph new_cnet_G;
-    _coarse_graining(cnet_G, cnet_c, cnet_x, new_cnet_G, toLayerId, cnet_theta);
+    vector<double> new_cnet_theta;
+    _coarse_graining(cnet_G, cnet_c, cnet_x, new_cnet_G, toLayerId, cnet_theta, new_cnet_theta);
     cnet_G = new_cnet_G;
+    cnet_theta = new_cnet_theta;
 
     int sz = cnet_G.get_num_nodes();
     if (sz == cnet_N) break;
@@ -452,4 +463,3 @@ void KM_multiresol::_louvain(Graph& G,
   };
   _relabeling(c);
 }
-
