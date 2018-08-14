@@ -44,7 +44,7 @@ G: NetworkX graph
 ports: list of length N
     Nodes to project (e.g., specify port nodes to create a network of ports)
 
-resol : float (Optional. Default = 1. 0<=resol )
+resol : float (Optional; Default = 1; 0<=resol )
     Resolution parameter 
 
 phi : dict of length M (Optional. Default phi[route] = 1 for all routes)
