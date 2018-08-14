@@ -1,4 +1,4 @@
-import _km_ompnet as _cp
+import _km_omp as _cp
 import networkx as nx
 from itertools import compress
 import numpy as np

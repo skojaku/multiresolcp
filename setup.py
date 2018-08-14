@@ -28,8 +28,8 @@ class get_pybind_include(object):
 
 ext_modules = [
     Extension(
-        '_km_ompnet',
-	['src/_km_ompnet.cpp'],
+        '_km_omp',
+	['src/_km_omp.cpp'],
         include_dirs=[
             # Path to pybind11 headers
             get_pybind_include(),

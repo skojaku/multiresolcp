@@ -2,13 +2,35 @@
 About this library
 ==================
 
-Python code of the KM algorithm for networks induced by a one-mode projection of bipartite networks.
+A Python wrapper for the c++ code of the KM algorithm for networks induced by a one-mode projection of bipartite networks.
 
 Please cite:
 
 Sadamori Kojaku, Mengqiao Xu, Haoxiang Xia and Naoki Masuda.
 Multiscale core-periphery structure in a global liner shipping network.
 Preprint arXiv: ????.
+
+Contents
+========
+- Python code
+  - multiresolcp/__init__.py
+  - multiresolcp/MultiResolCP.py
+  - example.py
+
+- C++ code 
+  - include/graph.h
+  - include/km_multiresol.h
+  - include/km_omp.h
+
+- Python - C++ interface
+  - src/_km_omp.h
+
+- Others (for PyPi registration and Travis-CI)
+  - LICENCE.txt
+  - MANIFEST.in
+  - .travis.yml
+  - requirements.txt
+  - tests
 
 Installation
 ============
@@ -108,3 +130,11 @@ Example
   # Show the detected consensus CP pairs 
   for k in list(c.keys()):
   	print('%s: %d %f' % (k, c[k], x[k]))
+
+Requirements
+============
+- Python 3.4 or later
+- Numpy 1.14 or later
+- SciPy 1.1 or later
+- NetworkX 2.0 or later
+- pybind11 2.2 or later 
