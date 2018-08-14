@@ -6,8 +6,8 @@ Python code of the KM algorithm for networks induced by a one-mode projection of
 
 Please cite:
 
-Sadamori Kojaku, Mengqiao Xu, Haoxiang Xia and Naoki Masuda.|
-Multiscale core-periphery structure in a global liner shipping network.A
+Sadamori Kojaku, Mengqiao Xu, Haoxiang Xia and Naoki Masuda.
+Multiscale core-periphery structure in a global liner shipping network.
 Preprint arXiv: ????.
 
 Installation
@@ -44,7 +44,7 @@ G: NetworkX graph
 ports: list of length N
     Nodes to project (e.g., specify port nodes to create a network of ports)
 
-resol : float (Optional. Default = 1)
+resol : float (Optional. Default = 1. 0<=resol )
     Resolution parameter 
 
 phi : dict of length M (Optional. Default phi[route] = 1 for all routes)
@@ -82,22 +82,29 @@ Example
 
 .. code-block:: python
   
-  import multiresolcp
   import networkx as nx
+  import numpy as np
+  import pandas as pd
+  import multiresolcp as mcp 
   
-  # Load NetworkX graph object from file "test.edgelist"
-  G = nx.read_edgelist("test.edgelist")
-
-  # Nodes to project (e.g., port nodes if one intends to create a network of ports) 
-  ports = [0, 1, 2, 3, 4] 
-
-  # Container capacity (e.g., key = route name, value = container capacity) 
-  phi = {5: 0.5, 6: 0.1, 7: 0.8, 8: 0.2, 9: 1} 
+  # Read edge list (space-separated file)
+  df = pd.read_csv('data/edge-list.dat', sep=' ')
   
-  # Detect core-periphery structure  
-  c, x = multiresolcp.detect(G, ports, phi = phi)
-
-  # Show results 
-  print('Pair\tCoreness')
-  for k in c.keys():
-    print('%d\t%f' % (c[k], x[k]))
+  # Read the capacity of each route 
+  df2 = pd.read_csv('data/capacity.dat', sep=' ')
+  
+  # Construct NetworkX graph object
+  G = nx.from_pandas_edgelist(df)
+  
+  # Make a dict object of capacities 
+  capacity = dict(zip(df2.name.values, df2.capacity.values))
+  
+  # Make a list of port nodes 
+  ports = df['source'].unique().tolist()
+  
+  # Detect core-periphery structure of the network of ports.
+  c, x = mcp.detect(G, ports, resol = 1, phi = capacity, consensus_threshold = 0.9, significance_level = 1.0)
+  
+  # Show the detected consensus CP pairs 
+  for k in list(c.keys()):
+  	print('%s: %d %f' % (k, c[k], x[k]))

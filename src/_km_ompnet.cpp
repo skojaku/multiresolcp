@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <iostream>
 
-#include <km_multiresol.h>
 #include <km_omp.h>
 
 using namespace std;

@@ -8,6 +8,8 @@
 #include <random>
 #include <vector>
 
+#include <km_multiresol.h>
+
 using namespace std;
 
 class KM_omp {

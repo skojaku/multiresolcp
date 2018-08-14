@@ -6,7 +6,7 @@ import setuptools
 import os
 from setuptools import setup, find_packages
 
-__version__ = '0.0.0'
+__version__ = '0.0.2'
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
@@ -102,13 +102,12 @@ setup(
     version=__version__,
     author='Sadamori Kojaku',
     author_email='freesailing4046@gmail.com',
-    description='Multiresolution version of the KM algorithm',
+    description='KM algorithm for networks induced by a one-mode projection of networks',
     long_description="sada",
-    url='https://github.com/skojaku/???',
+    url='https://github.com/skojaku/multiresolcp',
     ext_modules=ext_modules,
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     install_requires=['pybind11>=2.2', 'networkx>=2.0', 'numpy>=1.14.2'],
-#install_requires=['pybind11>=2.2', 'networkx>=2.0', 'numpy>=1.14.2', 'scipy>=1.1.0', 'simanneal'],
     cmdclass={'build_ext': BuildExt},
     zip_safe=False,
     include_package_data=True,
@@ -122,5 +121,5 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
     ],
-    keywords='network core-periphery structure',
+    keywords='network core-periphery structure bipartite network',
 )

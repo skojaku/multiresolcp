@@ -3,19 +3,24 @@ import numpy as np
 import pandas as pd
 import multiresolcp as mcp 
 
-filename = 'samples/unicodelang/unicode.dat' 
-#filename = 'samples/brunson_revolution/out.brunson_revolution_revolution' 
-#df["target"] = df['target']+df['source'].max()
+# Read edge list (space-separated file)
+df = pd.read_csv('data/edge-list.dat', sep=' ')
 
-df = pd.read_csv(filename, sep='\t', index_col = False, header=None, names = ['source', 'target'], keep_default_na=False, na_values=[''])
+# Read the capacity of each route 
+df2 = pd.read_csv('data/capacity.dat', sep=' ')
 
-ports = df['source'].unique().tolist()
-routes = df['target'].unique().tolist()
-
+# Construct NetworkX graph object
 G = nx.from_pandas_edgelist(df)
-print(len(G.edges()))
-c, x = mcp.detect(G, routes, resol = 2, consensus_threshold = 0.9)
-print(c)
 
+# Make a dict object of capacities 
+capacity = dict(zip(df2.name.values, df2.capacity.values))
+
+# Make a list of port nodes 
+ports = df['source'].unique().tolist()
+
+# Detect core-periphery structure of the network of ports.
+c, x = mcp.detect(G, ports, resol = 1, phi = capacity, consensus_threshold = 0.9, significance_level = 1.0)
+
+# Show the detected consensus CP pairs 
 for k in list(c.keys()):
 	print('%s: %d %f' % (k, c[k], x[k]))
