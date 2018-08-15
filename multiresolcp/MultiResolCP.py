@@ -5,8 +5,9 @@ import numpy as np
 import scipy
 from scipy.sparse import triu 
 
-def detect(G, ports, resol = 1, phi = {}, num_samples = 100, num_runs=10, consensus_threshold=0.9, significance_level = 0.05, num_rand_nets = 500):
+def detect(G, nodelist, resol = 1, phi = {}, num_samples = 100, num_runs=10, consensus_threshold=0.9, significance_level = 0.05, num_rand_nets = 500):
 	"""
+
 	Parameters
 	----------
 	
@@ -14,15 +15,16 @@ def detect(G, ports, resol = 1, phi = {}, num_samples = 100, num_runs=10, consen
 	    Bipartite network composed of N nodes of one type and M nodes of another type.
 	    See details in `NetworkX documentation <https://networkx.github.io/documentation/stable/>`_.
 	
-	ports: list of length N
-	    Nodes to project (e.g., specify port nodes to create a network of ports)
+	nodelist: list of length N
+	    Names of nodes to project (e.g., specify port nodes to create a network of ports)
+	    Name of nodes can be strings or numbers
 	
 	resol : float (Optional; Default = 1; 0<=resol)
 	    Resolution parameter 
 	
-	phi : dict of length M (Optional; Default phi[route] = 1 for all routes)
-	    - key : route name
-	    - value : container capacity 
+	phi : dict of length M (Optional; Default phi[r] = 1 for all r)
+	    - key : node name (strings or numbers)
+	    - value : container capacity
 	
 	num_samples: int (Optional; Default = 100; 0 < num_samples)
 	    Number of sample CP structures used to obtain consensus CP structure
@@ -38,33 +40,33 @@ def detect(G, ports, resol = 1, phi = {}, num_samples = 100, num_runs=10, consen
 	
 	num_rand_nets: int (Optional; Default = 500; 0 < num_rand_nets)
 	    Number of randomised networks used to infer the statistical significance
-	
+
 	Returns
 	-------
 	
 	c: dict of length N
-	    - key: port name
-	    - value: index of the consensus CP pair to which the port belongs  
+	    - key: node name
+	    - value: index of the consensus CP pair to which the node belongs (the index starts from zero)
 	
 	x: dict of length N
-	    - key: port name
-	    - value: coreness of the port
+	    - key: node name
+	    - value: coreness of the node
 	"""
 
-	# Make a list of route nodes.  	
-	routes = [node for node in G.nodes() if node not in ports]
-	
-	Np = len(ports) # Number of ports
-	Nr = len(routes) # Number of routes
+	# Make a list of the nodes that do not appear in nodelist
+	comp_nodelist = [node for node in G.nodes() if node not in nodelist]
+
+	Np = len(nodelist)
+	Nr = len(comp_nodelist)
 	
 	# Convert phi (dict) to numpy array. 
 	if len(phi) == 0:
-		phi = np.array(np.ones(len(routes))).astype(float)
+		phi = np.array(np.ones(len(comp_nodelist))).astype(float)
 	else:
-		phi = np.array([phi[r] for r in routes]).astype(float)
+		phi = np.array([phi[r] for r in comp_nodelist]).astype(float)
 
 	# Make the list of edges in the given network
-	A = nx.adjacency_matrix(G, ports+routes)
+	A = nx.adjacency_matrix(G, nodelist+comp_nodelist)
 	r, c = triu(A).nonzero()
 	edges = np.array([[rc[0], rc[1]] for rc in zip(r, c)]).astype(int)
 	
@@ -86,7 +88,7 @@ def detect(G, ports, resol = 1, phi = {}, num_samples = 100, num_runs=10, consen
 	
 	# Remove the homeless nodes that do not belong to any consensus CP pairs  	
 	b = c>=0
-	c = dict(zip(compress(ports,b), c[b]))	
-	x = dict(zip(compress(ports,b), x[b]))
+	c = dict(zip(compress(nodelist, b), c[b]))	
+	x = dict(zip(compress(nodelist, b), x[b]))
 	
 	return c,x	

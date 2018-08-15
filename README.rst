@@ -24,9 +24,9 @@ Python - C++ interface:
   - src/_km_omp.h
 
 Example data and code:
-  - example.py
-  - data/edge-list.dat 
-  - data/capacity.dat 
+  - example/example.py
+  - example/data/edge-list.dat 
+  - example/data/capacity.dat 
 
 Others (for PyPi registration and Travis-CI):
   - MANIFEST.in
@@ -57,7 +57,7 @@ Usage
 .. code-block:: bash
   
   import multiresolcp
-  c, x = multiresolcp.detect(G, ports, resol, phi, num_samples, num_runs, consensus_threshold, significance_level, num_rand_nets)
+  c, x = multiresolcp.detect(G, nodelist, resol, phi, num_samples, num_runs, consensus_threshold, significance_level, num_rand_nets)
 
 Parameters
 ----------
@@ -66,15 +66,16 @@ G: NetworkX graph
     Bipartite network composed of N nodes of one type and M nodes of another type.
     See details in `NetworkX documentation <https://networkx.github.io/documentation/stable/>`_.
 
-ports: list of length N
-    Nodes to project (e.g., specify port nodes to create a network of ports)
+nodelist: list of length N
+    Names of nodes to project (e.g., specify port nodes to create a network of ports)
+    Name of nodes can be strings or numbers. 
 
 resol : float (Optional; Default = 1; 0<=resol)
     Resolution parameter 
 
-phi : dict of length M (Optional; Default phi[route] = 1 for all routes)
-    - key : route name
-    - value : container capacity 
+phi : dict of length M (Optional; Default phi[r] = 1 for all r)
+    - key : node name (strings or numbers)
+    - value : container capacity
 
 num_samples: int (Optional; Default = 100; 0 < num_samples)
     Number of sample CP structures used to obtain consensus CP structure
@@ -95,20 +96,20 @@ Returns
 -------
 
 c: dict of length N
-    - key: port name
-    - value: index of the consensus CP pair to which the port belongs  
+    - key: node name
+    - value: index of the consensus CP pair to which the node belongs (the index starts from zero)
 
 x: dict of length N
-    - key: port name
-    - value: coreness of the port
+    - key: node name
+    - value: coreness of the node
 
 Note that c and x only contain the nodes in the consensus CP pairs.
 If c and x do not contain some nodes, it means that these missing nodes do not belong to any consensus CP pair. 
 If you obtain too few nodes in c and x, try decreasing the consensus threshold (i.e., consensus_threshold).
     
 
-Example
-=======
+Example (example/example.py)
+============================
 
 .. code-block:: python
   
