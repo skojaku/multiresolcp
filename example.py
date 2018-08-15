@@ -19,7 +19,7 @@ capacity = dict(zip(df2.name.values, df2.capacity.values))
 ports = df['source'].unique().tolist()
 
 # Detect core-periphery structure of the network of ports.
-c, x = mcp.detect(G, ports, resol = 1, phi = capacity, consensus_threshold = 0.9, significance_level = 1.0)
+c, x = mcp.detect(G, ports, resol = 10, phi = capacity, consensus_threshold = 0.1)
 
 # Show the detected consensus CP pairs 
 for k in list(c.keys()):

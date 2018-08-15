@@ -101,7 +101,7 @@ py::list _detect(py::array_t<int> edges,
 }
 
 /* Interface between C++ and Python */
-PYBIND11_MODULE(_km_ompnet, m) {
+PYBIND11_MODULE(_km_omp, m) {
   m.doc() = "The KM algorithm for networks induced by a one-mode projection of bipartite networks";
 
   m.def("_detect", &_detect, "KM algorithm", py::arg("edges"), py::arg("ports"), py::arg("routes"),
