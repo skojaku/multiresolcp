@@ -12,20 +12,20 @@ Preprint arXiv: ????.
 
 Contents
 ========
-- Python code
+Python code:
   - multiresolcp/__init__.py
   - multiresolcp/MultiResolCP.py
   - example.py
 
-- C++ code 
+C++ code: 
   - include/graph.h
   - include/km_multiresol.h
   - include/km_omp.h
 
-- Python - C++ interface
+Python - C++ interface:
   - src/_km_omp.h
 
-- Others (for PyPi registration and Travis-CI)
+Others (for PyPi registration and Travis-CI):
   - LICENCE.txt
   - MANIFEST.in
   - .travis.yml
