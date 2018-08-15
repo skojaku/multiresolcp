@@ -27,9 +27,9 @@ class KM_omp {
 
   /* Setter */
   void set_num_of_runs(int param) { _num_runs_KM_multiresol = param; };
-  void set_significance_level(int param) { _significance_level = param; };
   void set_num_of_samples(int param) { _num_samples = param; };
   void set_num_of_rand_nets(int param) { _num_rand_nets = param; };
+  void set_significance_level(double param) { _significance_level = param; };
   void set_consensus_threshold(double param) { _consensus_th = param; };
 
  private:
@@ -288,7 +288,6 @@ void KM_omp::_est_null_model(Graph& biG,
 #endif
     {
       for (int k = 0; k < K_rand; k++) {
-        if (nsr[k] <= 1) continue;
         nhat.push_back((double)nsr[k]);
         qhat.push_back(qr[k]);
       }
@@ -303,8 +302,8 @@ vector<double> KM_omp::_calc_p_values(vector<double>& q, vector<double>& n) {
   int K = q.size();
 
   int S = _nhat.size();
-  double q_ave = (double)accumulate(_nhat.begin(), _nhat.end(), 0.0) / (double)S;
-  double s_ave = (double)accumulate(_qhat.begin(), _qhat.end(), 0.0) / (double)S;
+  double s_ave = (double)accumulate(_nhat.begin(), _nhat.end(), 0.0) / (double)S;
+  double q_ave = (double)accumulate(_qhat.begin(), _qhat.end(), 0.0) / (double)S;
   double s_std = 0;
   double q_std = 0;
   for (int s = 0; s < S; s++) {
@@ -323,7 +322,6 @@ vector<double> KM_omp::_calc_p_values(vector<double>& q, vector<double>& n) {
     }
     gamma = gamma / ((double)(S - 1) * s_std * q_std);
   }
-
   double h = max(pow((double)S, -1.0 / 6.0), 1e-32);
   vector<double> p_values(K, 1.0);
   for (int k = 0; k < K; k++) {
