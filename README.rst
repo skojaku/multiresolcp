@@ -105,7 +105,6 @@ x: dict of length N
 
 
 .. note::
-   
     sadamori
     
 
