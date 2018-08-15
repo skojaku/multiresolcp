@@ -1,8 +1,6 @@
 
 About this library
 ==================
-[![Build Status]()](https://travis-ci.org/skojaku/multiresolcp.svg?branch=master)
-
 .. figure:: https://travis-ci.org/skojaku/multiresolcp.svg?branch=master
 
 A Python wrapper for the c++ code of the KM algorithm for networks induced by a one-mode projection of bipartite networks.
