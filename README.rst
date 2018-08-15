@@ -62,13 +62,12 @@ Usage
 Parameters
 ----------
 
-G: NetworkX graph
-    Bipartite network composed of N nodes of one type and M nodes of another type.
-    See details in `NetworkX documentation <https://networkx.github.io/documentation/stable/>`_.
+G: `NetworkX graph <https://networkx.github.io/documentation/stable/reference/introduction.html#graphs>`_.
+    - Bipartite network composed of N nodes of one type and M nodes of another type
 
 nodelist: list of length N
-    Names of nodes to project (e.g., specify port nodes to create a network of ports)
-    Name of nodes can be strings or numbers. 
+    - Names of nodes to project (e.g., specify port nodes to create a network of ports)
+    - Name of nodes can be strings or numbers 
 
 resol : float (Optional; Default = 1; 0<=resol)
     Resolution parameter 
@@ -78,19 +77,19 @@ phi : dict of length M (Optional; Default phi[r] = 1 for all r)
     - value : container capacity
 
 num_samples: int (Optional; Default = 100; 0 < num_samples)
-    Number of sample CP structures used to obtain consensus CP structure
+    - Number of sample CP structures used to obtain a consensus CP structure
 
 num_runs: int (Optional; Default = 10; 0 < num_runs)
-    Number of runs of the algorithm to find one sample CP structure
+    - Number of runs of the algorithm to find one sample CP structure
 
 consensus_threshold: float (Optional; Default = 0.9; 0 <= consensus_threshold <=1)
-    Consensus threshold
+    - Consensus threshold
 
 significance_level: float (Optional; Default = 0.05; 0 < significance_level <=1)
-    Statistical significance level before the Šidák correction
+    - Statistical significance level before the Šidák correction
 
 num_rand_nets: int (Optional; Default = 500; 0 < num_rand_nets)
-    Number of randomised networks used to infer the statistical significance
+    - Number of randomised networks used to infer the statistical significance
 
 Returns
 -------
