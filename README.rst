@@ -1,14 +1,15 @@
 
 About this library
 ==================
+[![Build Status]()](https://travis-ci.org/skojaku/multiresolcp.svg?branch=master)
+
+.. figure:: https://travis-ci.org/skojaku/multiresolcp.svg?branch=master
 
 A Python wrapper for the c++ code of the KM algorithm for networks induced by a one-mode projection of bipartite networks.
 
 Please cite:
 
-`Sadamori Kojaku, Mengqiao Xu, Haoxiang Xia and Naoki Masuda.
-Multiscale core-periphery structure in a global liner shipping network.
-Preprint arXiv: 1808.04549.<https://arxiv.org/pdf/1808.04549.pdf>`_
+`Sadamori Kojaku, Mengqiao Xu, Haoxiang Xia and Naoki Masuda. Multiscale core-periphery structure in a global liner shipping network. Preprint arXiv: 1808.04549. <http://arxiv.org/abs/1808.04549>`_
 
 Contents
 ========
