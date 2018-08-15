@@ -103,9 +103,9 @@ x: dict of length N
     - key: port name
     - value: coreness of the port
 
-
-.. note::
-    sadamori
+Note that c and x only contain the nodes in the consensus CP pairs.
+If c and x do not contain some nodes, it means that these missing nodes do not belong to any consensus CP pair. 
+If you obtain too few nodes in c and x, try decreasing consensus threshold (i.e., consensus_threshold).
     
 
 Example
