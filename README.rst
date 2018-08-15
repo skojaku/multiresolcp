@@ -62,7 +62,7 @@ Usage
 Parameters
 ----------
 
-G: `NetworkX graph <https://networkx.github.io/documentation/stable/reference/introduction.html#graphs>`_.
+G: `NetworkX graph <https://networkx.github.io/documentation/stable/reference/introduction.html#graphs>`_
     - Bipartite network composed of N nodes of one type and M nodes of another type
 
 nodelist: list of length N
@@ -70,7 +70,7 @@ nodelist: list of length N
     - Name of nodes can be strings or numbers 
 
 resol : float (Optional; Default = 1; 0<=resol)
-    Resolution parameter 
+    - Resolution parameter 
 
 phi : dict of length M (Optional; Default phi[r] = 1 for all r)
     - key : node name (strings or numbers)
