@@ -15,21 +15,25 @@ Contents
 Python code:
   - multiresolcp/__init__.py
   - multiresolcp/MultiResolCP.py
-  - example.py
 
 C++ code: 
-  - include/graph.h
-  - include/km_multiresol.h
   - include/km_omp.h
+  - include/km_multiresol.h
+  - include/graph.h
 
 Python - C++ interface:
   - src/_km_omp.h
 
+Example data and code:
+  - example.py
+  - data/edge-list.dat 
+  - data/capacity.dat 
+
 Others (for PyPi registration and Travis-CI):
-  - LICENCE.txt
   - MANIFEST.in
-  - .travis.yml
   - requirements.txt
+  - setup.py
+  - .travis.yml
   - tests
 
 Installation
@@ -98,6 +102,12 @@ c: dict of length N
 x: dict of length N
     - key: port name
     - value: coreness of the port
+
+
+.. note::
+   
+    sadamori
+    
 
 Example
 =======
