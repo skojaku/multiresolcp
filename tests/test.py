@@ -6,10 +6,10 @@ import multiresolcp as mcp
 
 def test():
 	# Read edge list (space-separated file)
-	df = pd.read_csv('data/edge-list.dat', sep=' ')
+	df = pd.read_csv('example/data/edge-list.dat', sep=' ')
 	
 	# Read the capacity of each route 
-	df2 = pd.read_csv('data/capacity.dat', sep=' ')
+	df2 = pd.read_csv('example/data/capacity.dat', sep=' ')
 	
 	# Construct NetworkX graph object
 	G = nx.from_pandas_edgelist(df)
