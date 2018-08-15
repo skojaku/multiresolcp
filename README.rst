@@ -6,9 +6,9 @@ A Python wrapper for the c++ code of the KM algorithm for networks induced by a 
 
 Please cite:
 
-Sadamori Kojaku, Mengqiao Xu, Haoxiang Xia and Naoki Masuda.
+`Sadamori Kojaku, Mengqiao Xu, Haoxiang Xia and Naoki Masuda.
 Multiscale core-periphery structure in a global liner shipping network.
-Preprint arXiv: ????.
+Preprint arXiv: 1808.04549.<https://arxiv.org/pdf/1808.04549.pdf>`_
 
 Contents
 ========
