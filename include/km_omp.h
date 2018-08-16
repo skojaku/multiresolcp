@@ -19,7 +19,7 @@ class KM_omp {
   KM_omp();
 
   /* Main functions */
-  void detect(Graph& biG, vector<int>& ports, vector<int>& routes, map<int, double>& phi, double resol);
+  void detect(Graph& biG, vector<int>& nodes_to_project, vector<int>& nodes_to_be_collapsed, map<int, double>& phi, double resol);
 
   /* Getter */
   vector<int> get_c() const { return _c; };
@@ -45,11 +45,11 @@ class KM_omp {
   vector<double> _x;
 
   void _one_mode_projection(
-      Graph& biG, vector<int>& ports, vector<int>& routes, map<int, double>& phi, Graph& uniG);
+      Graph& biG, vector<int>& nodes_to_project, vector<int>& nodes_to_be_collapsed, map<int, double>& phi, Graph& uniG);
 
   void _est_null_model(Graph& biG,
-                       vector<int>& ports,
-                       vector<int>& routes,
+                       vector<int>& nodes_to_project,
+                       vector<int>& nodes_to_be_collapsed,
                        map<int, double>& phi,
                        double resol,
                        int num_of_net);
@@ -75,27 +75,27 @@ KM_omp::KM_omp() {
 Public functions
 -----------------------------*/
 void KM_omp::detect(
-    Graph& biG, vector<int>& ports, vector<int>& routes, map<int, double>& phi, double resol) {
-  int Np = ports.size();
-  int Nr = routes.size();
+    Graph& biG, vector<int>& nodes_to_project, vector<int>& nodes_to_be_collapsed, map<int, double>& phi, double resol) {
+  int Np = nodes_to_project.size();
+  int Nr = nodes_to_be_collapsed.size();
 
   vector<double> theta(Np, 0.0);
   int idx = 0;
-  for (auto& p : ports) {
+  for (auto& p : nodes_to_project) {
     theta[idx] = biG.degree(p);
     idx++;
   }
 
   double phi_d_r = 0;
   double M = biG.get_num_edges();
-  for (auto& r : routes) {
+  for (auto& r : nodes_to_be_collapsed) {
     phi_d_r += phi[r] * biG.degree(r);
   }
   resol *= phi_d_r / (M * (M - 1));
 
   Graph uniG;
-  _one_mode_projection(biG, ports, routes, phi, uniG);
-  _est_null_model(biG, ports, routes, phi, resol, _num_rand_nets);
+  _one_mode_projection(biG, nodes_to_project, nodes_to_be_collapsed, phi, uniG);
+  _est_null_model(biG, nodes_to_project, nodes_to_be_collapsed, phi, resol, _num_rand_nets);
 
   Graph U;
   vector<double> X(Np, 0.0);
@@ -151,8 +151,8 @@ void KM_omp::detect(
 Private functions
 -----------------------------*/
 void KM_omp::_one_mode_projection(
-    Graph& G, vector<int>& ports, vector<int>& routes, map<int, double>& phi, Graph& uniG) {
-  for (auto& r : routes) {
+    Graph& G, vector<int>& nodes_to_project, vector<int>& nodes_to_be_collapsed, map<int, double>& phi, Graph& uniG) {
+  for (auto& r : nodes_to_be_collapsed) {
     vector<AdjacentNode> adj = G.neighbours(r);
     int sz = adj.size();
     double phi_r = phi[r];
@@ -168,8 +168,8 @@ void KM_omp::_one_mode_projection(
 }
 
 void KM_omp::_est_null_model(Graph& biG,
-                             vector<int>& ports,
-                             vector<int>& routes,
+                             vector<int>& nodes_to_project,
+                             vector<int>& nodes_to_be_collapsed,
                              map<int, double>& phi,
                              double resol,
                              int num_of_net) {
@@ -224,25 +224,25 @@ void KM_omp::_est_null_model(Graph& biG,
   };
 
   bool isunweighted = true;
-  int Nport = ports.size();
-  int Nroute = routes.size();
+  int Nprj = nodes_to_project.size();
+  int Nclp = nodes_to_be_collapsed.size();
   int idx = 0;
-  vector<double> rdeg(Nport, 0.0);
-  vector<double> cdeg(Nroute, 0.0);
-  for (auto& p : ports) {
+  vector<double> rdeg(Nprj, 0.0);
+  vector<double> cdeg(Nclp, 0.0);
+  for (auto& p : nodes_to_project) {
     rdeg[idx] = biG.degree(p);
     idx++;
   }
   idx = 0;
-  for (auto& r : routes) {
+  for (auto& r : nodes_to_be_collapsed) {
     cdeg[idx] = biG.degree(r);
     idx++;
   }
 
-  vector<int> rdeg_rank(Nport);
+  vector<int> rdeg_rank(Nprj);
   iota(rdeg_rank.begin(), rdeg_rank.end(), 0);
   sort(rdeg_rank.begin(), rdeg_rank.end(), [&](int x, int y) { return rdeg[x] > rdeg[y]; });
-  vector<int> cdeg_rank(Nroute);
+  vector<int> cdeg_rank(Nclp);
   iota(cdeg_rank.begin(), cdeg_rank.end(), 0);
   sort(cdeg_rank.begin(), cdeg_rank.end(), [&](int x, int y) { return cdeg[x] > cdeg[y]; });
 
@@ -263,14 +263,14 @@ void KM_omp::_est_null_model(Graph& biG,
 
     Graph biG_rand;
     Graph uniG_rand;
-    _Chung_Lu_Algorithm_bipartite(rdeg, cdeg, rdeg_rank, cdeg_rank, ports, routes, biG_rand, isunweighted,
+    _Chung_Lu_Algorithm_bipartite(rdeg, cdeg, rdeg_rank, cdeg_rank, nodes_to_project, nodes_to_be_collapsed, biG_rand, isunweighted,
                                   mtrnd_list[tid]);
 
-    _one_mode_projection(biG_rand, ports, routes, phi, uniG_rand);
+    _one_mode_projection(biG_rand, nodes_to_project, nodes_to_be_collapsed, phi, uniG_rand);
     map<int, int> node2node = uniG_rand.renumbering();
     vector<double> theta(uniG_rand.get_num_nodes(), 0.0);
     for (auto& p : uniG_rand.adjacency_list()) {
-      theta[p.first] = biG_rand.degree(ports[node2node[p.first]]);
+      theta[p.first] = biG_rand.degree(nodes_to_project[node2node[p.first]]);
     }
 
     KM_multiresol _km(_num_runs_KM_multiresol);

@@ -13,9 +13,9 @@ using namespace std;
 namespace py = pybind11;
 
 py::list _detect(py::array_t<int> edges,
-                 py::array_t<int> ports,
-                 py::array_t<int> routes,
-                 py::array_t<double> phi,
+                 py::array_t<int> nodes_to_project,
+                 py::array_t<int> nodes_to_be_collapsed,
+                 py::array_t<double> node_capacity,
                  double resol,
                  int num_samples,
                  int num_runs,
@@ -46,7 +46,7 @@ py::list _detect(py::array_t<int> edges,
     return a_vec;
   };
 
-  auto pyarray2phi_map = [](py::array_t<int> rt, py::array_t<double> ph) {
+  auto pyarray2node_capacity_map = [](py::array_t<int> rt, py::array_t<double> ph) {
     auto rt_py = rt.data();
     auto ph_py = ph.data();
     auto r = rt.request();
@@ -78,9 +78,9 @@ py::list _detect(py::array_t<int> edges,
   Graph G = edges2graph(edges);
 
   /* Convert python objects to c++ objects */
-  map<int, double> phi_map = pyarray2phi_map(routes, phi);
-  vector<int> ports_vec = pyarray2vec_int(ports);
-  vector<int> routes_vec = pyarray2vec_int(routes);
+  map<int, double> node_capacity_map = pyarray2node_capacity_map(nodes_to_be_collapsed, node_capacity);
+  vector<int> nodes_to_project_vec = pyarray2vec_int(nodes_to_project);
+  vector<int> nodes_to_be_collapsed_vec = pyarray2vec_int(nodes_to_be_collapsed);
 
   /* Core-periphery detection */
   KM_omp km = KM_omp();
@@ -89,7 +89,7 @@ py::list _detect(py::array_t<int> edges,
   km.set_num_of_samples(num_samples);
   km.set_num_of_rand_nets(num_rand_nets);
   km.set_consensus_threshold(consensus_threshold);
-  km.detect(G, ports_vec, routes_vec, phi_map, resol);
+  km.detect(G, nodes_to_project_vec, nodes_to_be_collapsed_vec, node_capacity_map, resol);
 
   /* Retrieve results */
   vector<int> c = km.get_c();
@@ -104,7 +104,7 @@ py::list _detect(py::array_t<int> edges,
 PYBIND11_MODULE(_km_omp, m) {
   m.doc() = "The KM algorithm for networks induced by a one-mode projection of bipartite networks";
 
-  m.def("_detect", &_detect, "KM algorithm", py::arg("edges"), py::arg("ports"), py::arg("routes"),
-        py::arg("phi"), py::arg("resol"), py::arg("num_samples"), py::arg("num_runs"),
+  m.def("_detect", &_detect, "KM algorithm", py::arg("edges"), py::arg("nodes_to_project"), py::arg("nodes_to_be_collapsed"),
+        py::arg("node_capacity"), py::arg("resol"), py::arg("num_samples"), py::arg("num_runs"),
         py::arg("consensus_threshold"), py::arg("significance_level"), py::arg("num_rand_nets"));
 }
