@@ -5,7 +5,7 @@ import numpy as np
 import scipy
 from scipy.sparse import triu 
 
-def detect(G, nodes_in_part1, nodes_in_part2, part_to_project, resol = 1, node_capacity = {}, num_samples = 100, num_runs=10, consensus_threshold=0.9, significance_level = 0.05, num_rand_nets = 500):
+def detect(G, nodes_in_part1, nodes_in_part2, part_to_project, resol = 1, node_capacity = {}, num_samples = 100, consensus_threshold=0.9, significance_level = 0.05, num_rand_nets = 500):
 
 	# Input check 
 	if part_to_project == 'part1':
@@ -53,7 +53,7 @@ def detect(G, nodes_in_part1, nodes_in_part2, part_to_project, resol = 1, node_c
 			node_capacity = np.array(node_capacity).astype(float),\
 			resol = float(resol),\
 			num_samples = int(num_samples),\
-			num_runs = int(num_runs),\
+			num_runs = 10,\
 			consensus_threshold = float(consensus_threshold),\
 			significance_level = float(significance_level),\
 			num_rand_nets = int(num_rand_nets))

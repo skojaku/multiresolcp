@@ -57,7 +57,7 @@ Usage
 .. code-block:: bash
   
   import multiresolcp
-  c, x = multiresolcp.detect(G, nodes_in_part1, nodes_in_part2, part_to_project, resol, node_capacity, num_samples, num_runs, consensus_threshold, significance_level, num_rand_nets)
+  c, x = multiresolcp.detect(G, nodes_in_part1, nodes_in_part2, part_to_project, resol, node_capacity, num_samples, consensus_threshold, significance_level, num_rand_nets)
 
 Parameters
 ----------
