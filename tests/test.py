@@ -21,7 +21,7 @@ def test1():
 	part2 = df['target'].unique().tolist()
 	
 	# Make a dict object of node capacities 
-	df2 = pd.read_csv('data/capacity.dat', sep=' ')
+	df2 = pd.read_csv('examples/data/capacity.dat', sep=' ')
 	node_capacity = dict(zip(df2.name.values, df2.capacity.values))
 	
 	# Detect core-periphery structure in the network of nodes in part 1 
