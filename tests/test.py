@@ -11,7 +11,7 @@ def test1():
 	import multiresolcp as mcp 
 	
 	# Read edge list (space-separated file)
-	df = pd.read_csv('data/edge-list.dat', sep=' ')
+	df = pd.read_csv('examples/data/edge-list.dat', sep=' ')
 	
 	# Construct NetworkX graph object
 	G = nx.from_pandas_edgelist(df)
@@ -40,7 +40,7 @@ def test2():
 	import multiresolcp as mcp 
 	
 	# Read edge list (space-separated file)
-	df = pd.read_csv('data/edge-list.dat', sep=' ')
+	df = pd.read_csv('examples/data/edge-list.dat', sep=' ')
 	
 	# Construct NetworkX graph object
 	G = nx.from_pandas_edgelist(df)
