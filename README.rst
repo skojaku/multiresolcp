@@ -82,7 +82,8 @@ resol : float (Optional; Default resol = 1; 0<=resol)
 node_capacity : dict (Optional; Default node_capacity[r] = 1 for all r)
     - key : node's name (string or number) in the part NOT to project onto 
     - value : node_capacity of node
-    - node_capacity is used to set the weight of edges in the projected network. Specifically, we set the weight of each edge in the projected network by summing node_capacity[r] / (degree[r] -1) over all nodes in the part not to project onto, where degree[r] is the degree of node r in the bipartite network.
+    - node_capacity is used to set the weight of edges in the projected network. Specifically, we place an edge between the nodes in 'part_to_project' if they have at least one common neighbour in the bipartite network. 
+      Then, we set the weight of the edge by summing 'node_capacity[r]' / (degree[r] -1) over all common neighbours r, where degree[r] is the degree of node r in the bipartite network.
 
 num_samples: int (Optional; Default num_samples = 100; 0 < num_samples)
     - Number of CP structures detected for the same given network, which are used for the consensus clustering
