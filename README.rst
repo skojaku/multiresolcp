@@ -64,7 +64,7 @@ Parameters
 
 G: `NetworkX graph object <https://networkx.github.io/documentation/stable/reference/introduction.html#graphs>`_
     - Unweighted  bipartite network composed of N nodes in part 1 and M nodes in part 2 
-    - Node's name can be string or numbers
+    - Node's name can be string or number
     - Nodes in the same part should not be connected
 
 nodes_in_part1: list of length N 
@@ -74,20 +74,21 @@ nodes_in_part2: list of length M
     - List of all nodes' names in part 2
 
 part_to_project: string 
-    - Specify the part to project (set either part_to_project='part1' or part_to_project='part2')
+    - Specify the part to project onto (set either part_to_project='part1' or part_to_project='part2')
 
 resol : float (Optional; Default resol = 1; 0<=resol)
     - Resolution parameter 
 
 node_capacity : dict (Optional; Default node_capacity[r] = 1 for all r)
-    - key : node's name (strings or numbers)
-    - value : node_capacity of node 
+    - key : node's name (string or number) in the part NOT to project onto 
+    - value : node_capacity of node
+    -node_capacity is used to set the weight of edges in the projected network. Specifically, we set the weight of each edge in the projected network by summing node_capacity[r] / (degree[r] -1) over all nodes in the part not to project onto, where degree[r] is the degree of node r in the bipartite network.
 
 num_samples: int (Optional; Default num_samples = 100; 0 < num_samples)
-    - Number of sample CP structures used for the consensus clustering
+    - Number of CP structures detected for the same given network, which are used for the consensus clustering
 
-consensus_threshold: float (Optional; Default consensu_threshold = 0.9; 0 <= consensus_threshold <=1)
-    - Consensus threshold
+consensus_threshold: float (Optional; Default consensus_threshold = 0.9; 0 <= consensus_threshold <=1)
+    - Consensus threshold. If two nodes belong to the same CP pair in at least 'consensus_threshold' * 'num_samples' CP structures out of the 'num_samples' CP structures detected for the given network, we regard that the two nodes belong to the same CP pair in the consensus clustering.
 
 significance_level: float (Optional; Default significance_level = 0.05; 0 < significance_level <=1)
     - Statistical significance level before the Šidák correction
