@@ -16,16 +16,15 @@ def detect(G, nodes_in_part1, nodes_in_part2, part_to_project, resol = 1, node_c
 		nodes_to_project = nodes_in_part2
 		nodes_to_be_collapsed = nodes_in_part1
 	else:
-		raise Exception("Error in part_to_project. Set either part_to_project = 'part1' or part_to_project = 'part2.'") 
+		raise Exception("Invalid parameter part_to_project. Set either part_to_project = 'part1' or part_to_project = 'part2'.") 
 
 	nodes_to_project = set(nodes_to_project)	
 	nodes_to_be_collapsed = set(nodes_to_be_collapsed)	
 	if len(list(nodes_to_project.intersection(nodes_to_be_collapsed))) >0:
-		raise Exception("Error in nodes_in_part1 and nodes_in_part2. nodes_in_part1 and nodes_in_part2 should not contain the same node.") 
+		raise Exception("Invalid parameters nodes_in_part1 and nodes_in_part2. nodes_in_part1 and nodes_in_part2 should not contain the same node.") 
 
 	if nodes_to_project.union(nodes_to_be_collapsed)  != set(G.nodes()):
-		raise Exception("Error in nodes_in_part1 and nodes_in_part2. Some nodes are missing in nodes_in_part1 and nodes_in_part2.") 
-		raise Exception("Error in part1 and nodes_to_be_collapsed. ") 
+		raise Exception("Invalid parameters nodes_in_part1 and nodes_in_part2. Some nodes are missing.") 
 		
 	if len(node_capacity) == 0:
 		node_capacity = np.array(np.ones(len(nodes_to_be_collapsed))).astype(float)
