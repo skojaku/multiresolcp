@@ -5,63 +5,20 @@ import multiresolcp as mcp
 
 
 def test1():
-	import networkx as nx
-	import numpy as np
-	import pandas as pd
-	import multiresolcp as mcp 
-	
-	# Read edge list (space-separated file)
-	df = pd.read_csv('examples/data/edge-list.dat', sep=' ')
-	
-	# Construct NetworkX graph object
-	G = nx.from_pandas_edgelist(df)
-	
-	# Make a list of nodes in part 1 and that of nodes in part 2
-	part1 = df['source'].unique().tolist()
-	part2 = df['target'].unique().tolist()
-	
-	# Make a dict object of node capacities 
-	df2 = pd.read_csv('examples/data/capacity.dat', sep=' ')
-	node_capacity = dict(zip(df2.name.values, df2.capacity.values))
-	
-	# Detect core-periphery structure in the network of nodes in part 1 
-	c, x = mcp.detect(G, part1, part2, part_to_project = 'part1', node_capacity = node_capacity)
-	
-	# Show the detected consensus CP pairs 
-	print('Core-periphery structure in the network of nodes in part 1')
-	for k in  sorted(c, key=c.get):
-		print('%s: %d %f' % (k, c[k], x[k]))
-	
 
-def test2():
-	import networkx as nx
-	import numpy as np
-	import pandas as pd
-	import multiresolcp as mcp 
+	df = pd.read_csv('example/data/edge-list.dat', sep=' ') # Load a list of edges (space-separated file)
 	
-	# Read edge list (space-separated file)
-	df = pd.read_csv('examples/data/edge-list.dat', sep=' ')
+	G = nx.from_pandas_edgelist(df) # NetworkX graph object
 	
-	# Construct NetworkX graph object
-	G = nx.from_pandas_edgelist(df)
+	part1 = df['source'].unique().tolist() # List of nodes in part 1
+	part2 = df['target'].unique().tolist() # List of nodes in part 2
 	
-	# Make a list of nodes in part 1 and that of nodes in part 2
-	part1 = df['source'].unique().tolist()
-	part2 = df['target'].unique().tolist()
+	for resolution in [0.01, 0.1, 0.5, 1, 1.5, 2]:	
 	
-	# Detect core-periphery structure in the network of nodes in part 1 
-	c, x = mcp.detect(G, part1, part2, part_to_project = 'part1')
+		c, x = mcp.detect(G, part1, part2, part_to_project = 'part1', resol = resolution) # Detect core-periphery structure at 'resolution'
 	
-	# Show the detected consensus CP pairs 
-	print('Core-periphery structure in the network of nodes in part 1')
-	for k in  sorted(c, key=c.get):
-		print('%s: %d %f' % (k, c[k], x[k]))
-	
-	print("") 
-	
-	print('Core-periphery structure in the network of nodes in part 2')
-	c, x = mcp.detect(G, part1, part2, part_to_project = 'part2')
-	
-	# Show the detected consensus CP pairs 
-	for k in  sorted(c, key=c.get):
-		print('%s: %d %f' % (k, c[k], x[k]))
+		# Show results	
+		print('')
+		print('resolution = %f' % resolution)
+		print('c:', c)
+		print('x:', x)
