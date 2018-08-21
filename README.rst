@@ -26,7 +26,6 @@ Python - C++ interface:
 Example data and code:
   - example/example.py
   - example/data/edge-list.dat 
-  - example/data/capacity.dat 
 
 Others (for PyPi registration and Travis-CI):
   - MANIFEST.in
