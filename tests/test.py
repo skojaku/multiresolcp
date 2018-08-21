@@ -4,8 +4,8 @@ import pandas as pd
 import multiresolcp as mcp 
 
 
-def test1():
-
+def test():
+	
 	df = pd.read_csv('example/data/edge-list.dat', sep=' ') # Load a list of edges (space-separated file)
 	
 	G = nx.from_pandas_edgelist(df) # NetworkX graph object

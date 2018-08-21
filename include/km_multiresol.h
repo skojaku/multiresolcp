@@ -205,7 +205,7 @@ void KM_multiresol::_label_switching(Graph& G,
           dQ = Q_i_core;
         }
       }
-    };  // End of _propose_new_label
+    };// End of _propose_new_label
 
     int N = G.get_num_nodes();
     vector<double> sum_of_th_core(N, 0.0);
@@ -271,7 +271,7 @@ void KM_multiresol::_label_switching(Graph& G,
       }
       c[i] = cid;
     }
-  };  // End of __label_switching
+  };// End of __label_switching
 
   /* Label switching (outer loop) */
   int N = G.get_num_nodes();
@@ -374,7 +374,7 @@ void KM_multiresol::_louvain(Graph& G,
       int sid = toLayerId[mi];
       theta_new[sid] += theta[i];
     }
-  };  // End of _coarse_graining
+  };// End of _coarse_graining
 
   /* Initialisation */
   int N = G.get_num_nodes();

@@ -100,9 +100,9 @@ void KM_omp::detect(
   Graph U;
   vector<double> X(Np, 0.0);
   vector<double> sig_count(Np, 0.0);
-#ifdef _OPENMP
-#pragma omp parallel for shared(X, sig_count, U)
-#endif
+  #ifdef _OPENMP
+  #pragma omp parallel for shared(X, sig_count, U)
+  #endif
   for (int sid = 0; sid < _num_samples; sid++) {
     KM_multiresol _km(_num_runs_KM_multiresol);
     _km.detect(uniG, theta, resol);
@@ -118,9 +118,9 @@ void KM_omp::detect(
     }
     vector<double> pvals = _calc_p_values(qs, ns);
     double alpha = 1.0 - pow(1.0 - _significance_level, (1.0 / (double)Ks));
-#ifdef _OPENMP
-#pragma omp critical
-#endif
+    #ifdef _OPENMP
+    #pragma omp critical
+    #endif
     {
       for (int i = 0; i < Np; i++) {
         if (pvals[cs[i]] > alpha) continue;
@@ -247,7 +247,7 @@ void KM_omp::_est_null_model(Graph& biG,
   sort(cdeg_rank.begin(), cdeg_rank.end(), [&](int x, int y) { return cdeg[x] > cdeg[y]; });
 
   int numthread = 1;
-#pragma omp parallel
+  #pragma omp parallel
   { numthread = omp_get_num_threads(); }
   vector<mt19937_64> mtrnd_list(numthread);
   for (int i = 0; i < numthread; i++) {
@@ -255,9 +255,9 @@ void KM_omp::_est_null_model(Graph& biG,
   }
   vector<double> nhat;
   vector<double> qhat;
-#ifdef _OPENMP
-#pragma omp parallel for shared(mtrnd_list, nhat, qhat)
-#endif
+  #ifdef _OPENMP
+  #pragma omp parallel for shared(mtrnd_list, nhat, qhat)
+  #endif
   for (int it = 0; it < _num_rand_nets; it++) {
     int tid = omp_get_thread_num();
 
@@ -283,9 +283,9 @@ void KM_omp::_est_null_model(Graph& biG,
     for (auto& p : uniG_rand.adjacency_list()) {
       nsr[cr[p.first]]++;
     }
-#ifdef _OPENMP
-#pragma omp critical
-#endif
+    #ifdef _OPENMP
+    #pragma omp critical
+    #endif
     {
       for (int k = 0; k < K_rand; k++) {
         nhat.push_back((double)nsr[k]);
