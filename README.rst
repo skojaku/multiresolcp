@@ -63,9 +63,9 @@ Parameters
 ----------
 
 G: `NetworkX graph object <https://networkx.github.io/documentation/stable/reference/introduction.html#graphs>`_
-    - Unweighted  bipartite network composed of N nodes in part 1 and M nodes in part 2 
-    - Node's name can be string or number
-    - Nodes in the same part should not be connected
+    - Unweighted bipartite network composed of N nodes in part 1 and M nodes in part 2 
+    - Node's name can be string or number.
+    - Nodes in the same part should not be adjacent to each other.
 
 nodes_in_part1: list of length N 
     - List of all nodes' names in part 1
@@ -81,18 +81,18 @@ resol : float (Optional; Default resol = 1; 0<=resol)
 
 node_capacity : dict (Optional; Default node_capacity[r] = 1 for all r)
     - key : node's name (string or number). 
-      If part_to_project = 'part1', then set the names of nodes in part 2. If part_to_project = 'part2', then set the names of nodes in part 1.   
+      If part_to_project = 'part1', then set key to the names of nodes in part 2. If part_to_project = 'part2', then set key to the names of nodes in part 1.   
     - value : node_capacity of node.
       node_capacity is used to set the weight of edges in the projected network. 
-      If part_to_project='part1', we place an edge between each pair of nodes in part 1 that have at least one common neighbour in the bipartite network.
+      If part_to_project = 'part1', we place an edge between each pair of nodes in part 1 that have at least one common neighbour in the bipartite network.
       Then, we set the weight of the edge by summing 'node_capacity[r]' / (degree[r] -1) over all common neighbours r, where degree[r] is the degree of node r in the bipartite network.  
-      If part_to_project='part2', we carry out the same procedure for nodes in part 2. 
+      If part_to_project = 'part2', we carry out the same procedure for nodes in part 2. 
 
 num_samples: int (Optional; Default num_samples = 100; 0 < num_samples)
-    - Number of CP structures detected for the same given network, which are used for the consensus clustering
+    - Number of optimisation runs carries out for the given network. num_samples is used for the consensus clustering.
 
 consensus_threshold: float (Optional; Default consensus_threshold = 0.9; 0 <= consensus_threshold <=1)
-    - Consensus threshold. If two nodes belong to the same CP pair in at least 'consensus_threshold' * 'num_samples' CP structures out of the 'num_samples' CP structures detected for the given network, we regard that the two nodes belong to the same CP pair in the consensus clustering.
+    - Consensus threshold. If two nodes belong to the same CP pair in at least 'consensus_threshold' * 'num_samples' optimisation runs out of the 'num_samples' optimisation runs carried out for the given network, the consensus clustering regards that the two nodes belong to the same CP pair.
 
 significance_level: float (Optional; Default significance_level = 0.05; 0 < significance_level <=1)
     - Statistical significance level before the Šidák correction
@@ -112,8 +112,8 @@ x: dict
     - value: coreness of the node
 
 Note that c and x only contain the nodes in the consensus CP pairs.
-If c and x do not contain some nodes, it means that these missing nodes do not belong to any consensus CP pair. 
-If you obtain too few nodes in c and x, try decreasing the consensus threshold (i.e., consensus_threshold).
+If c and x do not contain some nodes, it means that the missing nodes do not belong to any consensus CP pair. 
+If too few nodes are contained in c and x, try decreasing the consensus threshold (i.e., consensus_threshold).
     
 
 Example
