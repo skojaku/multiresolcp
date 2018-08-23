@@ -21,7 +21,7 @@ C++ code:
   - include/graph.h
 
 Python - C++ interface:
-  - src/_km_omp.h
+  - src/_km_omp.cpp
 
 Example data and code:
   - example/example.py
