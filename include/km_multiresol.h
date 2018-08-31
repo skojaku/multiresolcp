@@ -1,6 +1,6 @@
 /*
 
-This cod defines and implements a class object, KM_multiresol class, which carries out the detection of core-periphery structure in unipartite networks.
+This code defines and implements a class object, KM_multiresol class, which carries out the detection of core-periphery structure in unipartite networks.
 
 */
 
@@ -51,7 +51,7 @@ class KM_multiresol {
 
   c : ID of consensus core-periphery pair to which each node belongs
                                                                        
-  x : Coreness value of each node.
+  x : Coreness value of each node
 
   theta : Degree of each node to project onto 
 

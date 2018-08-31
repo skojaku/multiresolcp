@@ -1,6 +1,6 @@
 /*
 
-This cod defines and implements a class object, KM_omp class, which carries out the one-mode projection,
+This code defines and implements a class object, KM_omp class, which carries out the one-mode projection,
 significance test and consensus clustering.
 
 */
@@ -53,7 +53,7 @@ class KM_omp {
   
   Getters
   ------
-  get_c() : Return the ID of consensus core-periphery pair to which each node belongs.
+  get_c() : Return the ID of the consensus core-periphery pair to which each node belongs.
 
   get_x() : Return coreness value of each node.
 
@@ -65,21 +65,26 @@ class KM_omp {
 
   Setters
   -------
-  set_num_of_runs(int num_of_runs) : Set the number of runs of the Louvain algorithm implemented in
-                                     include/km_multiresol.h. We run the Louvain algorithm 'num_of_runs' times.
-                                     Then, we adopt the result yielding the largest quality.
+  set_num_of_runs(int num_of_runs) : 
+	Set the number of runs of the Louvain algorithm implemented in
+	include/km_multiresol.h. We run the Louvain algorithm 'num_of_runs' times.
+	Then, we adopt the result yielding the largest quality.
 
-  set_num_of_samples(int num_of_samples) : Set the number of optimisation runs carries out for the given network. 
-                                           'num_of_samples' is used for the consensus clustering.
+  set_num_of_samples(int num_of_samples) : 
+	Set the number of optimisation runs carries out for the given network. 
+	'num_of_samples' is used for the consensus clustering.
 
-  set_num_of_rand_nets(int num_of_rand_nets) : Set the number of randomised networks used to test the statistical significance.
+  set_num_of_rand_nets(int num_of_rand_nets) : 
+	Set the number of randomised networks used to test the statistical significance.
 
-  set_significance_level(double significance_level) : Set the statistical significance level before the Šidák correction
+  set_significance_level(double significance_level) : 
+	Set the statistical significance level before the Šidák correction
 
-  set_consensus_threshold(double consensus_threshold) : Set the consensus threshold. If two nodes belong to the same CP pair in 
-                                                        at least 'consensus_threshold' * 'num_of_samples' optimisation runs out 
-                                                        of the 'num_of_samples' optimisation runs carried out for the given network, 
-                                                        the consensus clustering regards that the two nodes belong to the same CP pair.
+  set_consensus_threshold(double consensus_threshold) : 
+	Set the consensus threshold. If two nodes belong to the same CP pair in 
+	at least 'consensus_threshold' * 'num_of_samples' optimisation runs out 
+	of the 'num_of_samples' optimisation runs carried out for the given network, 
+	the consensus clustering regards that the two nodes belong to the same CP pair.
 
   */
   void set_num_of_runs(int num_of_runs) { _num_runs_KM_multiresol = num_of_runs; };
